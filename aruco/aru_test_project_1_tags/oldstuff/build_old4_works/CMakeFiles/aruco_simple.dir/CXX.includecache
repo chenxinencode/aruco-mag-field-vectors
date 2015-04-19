@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/lubuntu/Desktop/aru_test_project/aruco_simple.cpp
+iostream
+-
+fstream
+-
+sstream
+-
+aruco/aruco.h
+-
+aruco/cvdrawingutils.h
+-
+

@@ -1,0 +1,15 @@
+%YAML:1.0
+           
+    oneVect: !!opencv-matrix
+       rows: 1
+       cols: 6
+       dt: f
+       data: [2, 0, 0, 0.5, 1, 0.5]
+       
+    someVects: !!opencv-matrix
+       rows: 3
+       cols: 6
+       dt: f
+       data: [0, 0, 0, 0.5, 1, 0.5,
+           1, 0, 0, 0.5, 1, 0.5,
+           3, 0, 0, 0.5, 1, 0.5]

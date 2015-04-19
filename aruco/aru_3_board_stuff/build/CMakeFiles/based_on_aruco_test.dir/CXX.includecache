@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/elabbiglubu/Desktop/all_final_proj_files/aru_3_board_stuff/based_on_aruco_test.cpp
+iostream
+-
+fstream
+-
+sstream
+-
+opencv2/opencv.hpp
+-
+aruco/aruco.h
+-
+aruco/cvdrawingutils.h
+-
+

@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 2.8)
+project(aruco_testproject)
+SET(CMAKE_MODULE_PATH ${CMAKE_INSTALL_PREFIX}/lib/cmake/ )
+find_package(aruco REQUIRED )
+add_executable(based_on_aruco_test_board based_on_aruco_test_board.cpp)
+target_link_libraries(based_on_aruco_test_board  ${aruco_LIBS})

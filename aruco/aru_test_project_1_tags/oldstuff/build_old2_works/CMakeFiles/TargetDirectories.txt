@@ -1,0 +1,1 @@
+/home/lubuntu/Desktop/aru_test_project/build/CMakeFiles/aruco_simple.dir

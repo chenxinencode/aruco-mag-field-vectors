@@ -1,0 +1,5 @@
+1) I copied aruco_test_board to based_on_aruco_test_board.
+2 ) I began to try to incorporate my changes in based_on_aruco_test (reading file and plotting vectors at arbitrary positions). Was unsuccesful.
+2b) Noticed that in a_t_b, the structure of the code is different, and draw3daxis doesn't seem to be working.
+
+Probably look at their other sample codes, or just play with a_t_b to at least get 3d axis drawn. I believe aruco_simple_board does work so that might be a better starting point.

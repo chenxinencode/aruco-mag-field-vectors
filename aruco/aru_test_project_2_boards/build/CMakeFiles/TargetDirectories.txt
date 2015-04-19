@@ -1,0 +1,1 @@
+/home/elabbiglubu/Desktop/all_final_proj_files/aru_test_project_2_boards/build/CMakeFiles/based_on_aruco_test_board.dir
