@@ -10,7 +10,8 @@ function quiver3AR(x,y,z,u,v,w)
     % Write beginning stuff
     fid = fopen('demo.yml','w');
     tot =       '%%YAML:1.0\n'; % this will output as a single percent sign.
-    tot = [tot, '    oneVec: !!opencv-matrix\n'];
+    tot = [tot, '    oneVect: !!opencv-matrix\n       rows: 1\n       cols:6\n       dt: f\n       data: [0,0,0,0,0,0]\n\n'];
+    tot = [tot, '    someVects: !!opencv-matrix\n'];
     fprintf(fid,tot);
     
     % number of rows based on how many vectors are being written
