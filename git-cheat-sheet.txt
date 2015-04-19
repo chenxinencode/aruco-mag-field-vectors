@@ -6,6 +6,8 @@ git config --global user.email "james.da.4th@gmail.com"
 once:
 git clone url/etc/stuff
 
+==================
+
 every time to send:
 git add filename.txt
 git commit -m "message goes here"
