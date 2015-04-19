@@ -1,1 +1,1 @@
-/home/elabbiglubu/Desktop/all_final_proj_files/aru_test_project_1_tags/build/CMakeFiles/based_on_aruco_test.dir
+/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_test_project_1_tags/build/CMakeFiles/based_on_aruco_test.dir

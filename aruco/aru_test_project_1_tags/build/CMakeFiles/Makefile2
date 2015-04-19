@@ -47,10 +47,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/elabbiglubu/Desktop/all_final_proj_files/aru_test_project_1_tags
+CMAKE_SOURCE_DIR = /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_test_project_1_tags
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/elabbiglubu/Desktop/all_final_proj_files/aru_test_project_1_tags/build
+CMAKE_BINARY_DIR = /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_test_project_1_tags/build
 
 #=============================================================================
 # Target rules for target CMakeFiles/based_on_aruco_test.dir
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/elabbiglubu/Desktop/all_final_proj_files/aru_test_proje
 CMakeFiles/based_on_aruco_test.dir/all:
 	$(MAKE) -f CMakeFiles/based_on_aruco_test.dir/build.make CMakeFiles/based_on_aruco_test.dir/depend
 	$(MAKE) -f CMakeFiles/based_on_aruco_test.dir/build.make CMakeFiles/based_on_aruco_test.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/elabbiglubu/Desktop/all_final_proj_files/aru_test_project_1_tags/build/CMakeFiles  1
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_test_project_1_tags/build/CMakeFiles  1
 	@echo "Built target based_on_aruco_test"
 .PHONY : CMakeFiles/based_on_aruco_test.dir/all
 
@@ -69,9 +69,9 @@ all: CMakeFiles/based_on_aruco_test.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/based_on_aruco_test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/elabbiglubu/Desktop/all_final_proj_files/aru_test_project_1_tags/build/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_test_project_1_tags/build/CMakeFiles 1
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/based_on_aruco_test.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/elabbiglubu/Desktop/all_final_proj_files/aru_test_project_1_tags/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_test_project_1_tags/build/CMakeFiles 0
 .PHONY : CMakeFiles/based_on_aruco_test.dir/rule
 
 # Convenience name for target.

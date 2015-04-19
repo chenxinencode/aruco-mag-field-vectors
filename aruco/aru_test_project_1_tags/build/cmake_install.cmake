@@ -1,4 +1,4 @@
-# Install script for directory: /home/elabbiglubu/Desktop/all_final_proj_files/aru_test_project_1_tags
+# Install script for directory: /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_test_project_1_tags
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -38,7 +38,7 @@ ELSE(CMAKE_INSTALL_COMPONENT)
   SET(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 ENDIF(CMAKE_INSTALL_COMPONENT)
 
-FILE(WRITE "/home/elabbiglubu/Desktop/all_final_proj_files/aru_test_project_1_tags/build/${CMAKE_INSTALL_MANIFEST}" "")
+FILE(WRITE "/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_test_project_1_tags/build/${CMAKE_INSTALL_MANIFEST}" "")
 FOREACH(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  FILE(APPEND "/home/elabbiglubu/Desktop/all_final_proj_files/aru_test_project_1_tags/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  FILE(APPEND "/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_test_project_1_tags/build/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 ENDFOREACH(file)

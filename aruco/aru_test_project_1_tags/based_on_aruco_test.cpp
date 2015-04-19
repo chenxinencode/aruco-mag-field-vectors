@@ -263,11 +263,11 @@ int main(int argc,char **argv)
             TheVideoCapturer.open(0);
             waitTime=10;
         }
-        if (TheInputVideo=="live0") {
+        else if (TheInputVideo=="live0") {
             TheVideoCapturer.open(0);
             waitTime=10;
         }
-        if (TheInputVideo=="live1") {
+        else if (TheInputVideo=="live1") {
             TheVideoCapturer.open(1);
             waitTime=10;
         }

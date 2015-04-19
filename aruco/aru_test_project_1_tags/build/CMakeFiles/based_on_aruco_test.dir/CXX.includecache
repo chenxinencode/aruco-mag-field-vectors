@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/home/elabbiglubu/Desktop/all_final_proj_files/aru_test_project_1_tags/based_on_aruco_test.cpp
+/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_test_project_1_tags/based_on_aruco_test.cpp
 iostream
 -
 fstream

@@ -9,7 +9,7 @@ make
 
 mkdir td
 
-cp /home/elabbiglubu/Downloads/aru_testdata/single/intrinsics.yml ./td/
+cp ~/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/input_data_files/aru_testdata/single/intrinsics.yml ./td/
 
 ##cp /home/elabbiglubu/Downloads/aru_testdata/board/* ./td/
 ##./based_on_aruco_test ./td/image-test.png ./td/board_meters.yml ./td/intrinsics.yml 0.039

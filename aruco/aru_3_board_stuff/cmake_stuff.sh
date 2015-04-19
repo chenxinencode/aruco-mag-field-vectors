@@ -11,6 +11,7 @@ mkdir td
 cp ~/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/input_data_files/aru_testdata/single/intrinsics.yml ./td/
 
 cp ~/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/input_data_files/22boardfiles/* ./td/
+cp ~/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/input_data_files/lab_frame_board_files/* ./td/
 
 
 

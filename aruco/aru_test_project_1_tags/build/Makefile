@@ -39,10 +39,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/elabbiglubu/Desktop/all_final_proj_files/aru_test_project_1_tags
+CMAKE_SOURCE_DIR = /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_test_project_1_tags
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/elabbiglubu/Desktop/all_final_proj_files/aru_test_project_1_tags/build
+CMAKE_BINARY_DIR = /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_test_project_1_tags/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -69,9 +69,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/elabbiglubu/Desktop/all_final_proj_files/aru_test_project_1_tags/build/CMakeFiles /home/elabbiglubu/Desktop/all_final_proj_files/aru_test_project_1_tags/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_test_project_1_tags/build/CMakeFiles /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_test_project_1_tags/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/elabbiglubu/Desktop/all_final_proj_files/aru_test_project_1_tags/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_test_project_1_tags/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

@@ -38,15 +38,20 @@ string TheInputVideo;
 string TheIntrinsicFile;
 string TheBoardConfigFile;
 string TheBoardConfigFile2;
+string TheBoardConfigFileLab;
 bool The3DInfoAvailable=false;
 float TheMarkerSize=-1;
+//float TheMarkerSize1=-1;
+//float TheMarkerSizeLab=-1;
 VideoCapture TheVideoCapturer;
 Mat TheInputImage,TheInputImageCopy;
 CameraParameters TheCameraParameters;
 BoardConfiguration TheBoardConfig;
 BoardConfiguration TheBoardConfig2;
+BoardConfiguration TheBoardConfigLab;
 BoardDetector TheBoardDetector;
 BoardDetector TheBoardDetector2;
+BoardDetector TheBoardDetectorLab;
 
 string TheOutVideoFilePath;
 cv::VideoWriter VWriter;
@@ -124,7 +129,7 @@ void drawVecAtPosOLDJUSTFORMARKERS(cv::Mat &Image,Marker &m,const CameraParamete
 }
 
 
-void drawVecAtPos(cv::Mat &Image,Board &B,const CameraParameters &CP, cv::Mat &locationData)
+void drawVecAtPos(cv::Mat &Image,Board &B,const CameraParameters &CP, cv::Mat &locationData, string toWrite)
 {
 	
 	float size=B[0].ssize*1;
@@ -159,45 +164,9 @@ void drawVecAtPos(cv::Mat &Image,Board &B,const CameraParameters &CP, cv::Mat &l
 // void arrowedLine(Mat& img, Point pt1, Point pt2, const Scalar& color, int thickness=1, int line_type=8, int shift=0, double tipLength=0.1)
 
     arrowedLine(Image,imagePoints[0],imagePoints[1],Scalar(255,255,255,255),1,CV_AA);
-    putText(Image,"awesome", imagePoints[1],FONT_HERSHEY_SIMPLEX, 0.6, Scalar(255,255,255,255),2);
+    putText(Image,toWrite, imagePoints[1],FONT_HERSHEY_SIMPLEX, 0.6, Scalar(255,255,255,255),2);
 	
-	
-	
-	
-	
-	
-	
-	
-	//// original stuffs
-//Mat objectPoints (4,3,CV_32FC1);
-//objectPoints.at<float>(0,0)=0;
-//objectPoints.at<float>(0,1)=0;
-//objectPoints.at<float>(0,2)=0;
-//objectPoints.at<float>(1,0)=5*B[0].ssize;
-//objectPoints.at<float>(1,1)=0;
-//objectPoints.at<float>(1,2)=0;
-//objectPoints.at<float>(2,0)=0;
-//objectPoints.at<float>(2,1)=2*B[0].ssize;
-//objectPoints.at<float>(2,2)=0;
-//objectPoints.at<float>(3,0)=0;
-//objectPoints.at<float>(3,1)=0;
-//objectPoints.at<float>(3,2)=2*B[0].ssize;
-
-
-
-
-//vector<Point2f> imagePoints;
-//projectPoints( objectPoints, B.Rvec,B.Tvec, CP.CameraMatrix, CP.Distorsion,   imagePoints);
-////draw lines of different colours
-//cv::line(Image,imagePoints[0],imagePoints[1],Scalar(0,0,255,255),2,CV_AA);
-//cv::line(Image,imagePoints[0],imagePoints[2],Scalar(0,255,0,255),2,CV_AA);
-//cv::line(Image,imagePoints[0],imagePoints[3],Scalar(255,0,0,255),2,CV_AA);
-
-//putText(Image,"X AWESOME", imagePoints[1],FONT_HERSHEY_SIMPLEX, 1, Scalar(0,0,255,255),2);
-//putText(Image,"Y", imagePoints[2],FONT_HERSHEY_SIMPLEX, 1, Scalar(0,255,0,255),2);
-//putText(Image,"Z", imagePoints[3],FONT_HERSHEY_SIMPLEX, 1, Scalar(255,0,0,255),2);
 }
-
 
 bool readArguments ( int argc,char **argv )
 {
@@ -210,16 +179,17 @@ bool readArguments ( int argc,char **argv )
     TheInputVideo=argv[1];
     TheBoardConfigFile=argv[2];
     TheBoardConfigFile2=argv[3];
-    if (argc>=5)
-        TheIntrinsicFile=argv[4];
+    TheBoardConfigFileLab=argv[4];
     if (argc>=6)
-        TheMarkerSize=atof(argv[5]);
+        TheIntrinsicFile=argv[5];
+    if (argc>=7)
+        TheMarkerSize=atof(argv[6]);
     //if (argc>=7)
     //    TheOutVideoFilePath=argv[6];
 
 
-    if (argc==5)
-        cerr<<"NOTE: You need makersize to see 3d info!!!!"<<endl;
+//    if (argc==5)
+//        cerr<<"NOTE: You need makersize to see 3d info!!!!"<<endl;
 
     return true;
 }
@@ -254,11 +224,21 @@ int main(int argc,char **argv)
 //parse arguments
         TheBoardConfig.readFromFile(TheBoardConfigFile);
         TheBoardConfig2.readFromFile(TheBoardConfigFile2);
+        TheBoardConfigLab.readFromFile(TheBoardConfigFileLab);
         //read from camera or from  file
         if (TheInputVideo=="live") {
             TheVideoCapturer.open(0);
             waitTime=10;
         }
+        else if (TheInputVideo=="live0") {
+            TheVideoCapturer.open(0);
+            waitTime=10;
+        }
+        else if (TheInputVideo=="live1") {
+            TheVideoCapturer.open(1);
+            waitTime=10;
+        }
+        
         else TheVideoCapturer.open(TheInputVideo);
         //check video is open
         if (!TheVideoCapturer.isOpened()) {
@@ -290,6 +270,9 @@ int main(int argc,char **argv)
 	    TheBoardDetector2.setParams(TheBoardConfig2,TheCameraParameters,TheMarkerSize);
 	    TheBoardDetector2.getMarkerDetector().getThresholdParams( ThresParam1,ThresParam2);
 	    TheBoardDetector2.getMarkerDetector().enableErosion(true);//for chessboards
+	    TheBoardDetectorLab.setParams(TheBoardConfigLab,TheCameraParameters,TheMarkerSize);
+	    TheBoardDetectorLab.getMarkerDetector().getThresholdParams( ThresParam1,ThresParam2);
+	    TheBoardDetectorLab.getMarkerDetector().enableErosion(true);//for chessboards
 	    
         iThresParam1=ThresParam1;
         iThresParam2=ThresParam2;
@@ -307,6 +290,7 @@ int main(int argc,char **argv)
             //Detection of the board
             float probDetect=TheBoardDetector.detect(TheInputImage);
             float probDetect2=TheBoardDetector2.detect(TheInputImage);
+            float probDetectLab=TheBoardDetectorLab.detect(TheInputImage);
             //chekc the speed by calculating the mean speed of all iterations
             AvrgTime.first+=((double)getTickCount()-tick)/getTickFrequency();
             AvrgTime.second++;
@@ -322,7 +306,7 @@ int main(int argc,char **argv)
 					cout << TheBoardDetector.getDetectedBoard().Tvec << endl;
 					Mat oneVect = (Mat_<float>(6,1) << atof(argv[6]), atof(argv[7]), atof(argv[8]), atof(argv[9]), atof(argv[10]), atof(argv[11]) ); // Column vector
                     CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
-                    drawVecAtPos(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters,oneVect);
+                    drawVecAtPos(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters,oneVect,"awesome");
                     //draw3dAxisBoardj(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
                     //draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
                 }
@@ -333,7 +317,70 @@ int main(int argc,char **argv)
                     //draw3dAxisBoardj(TheInputImageCopy,TheBoardDetector2.getDetectedBoard(),TheCameraParameters);
                     //draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
                 }
+                if ( probDetectLab>0.2)   {  // If we detected the lab frame board 
+					cout << TheBoardDetectorLab.getDetectedBoard().Rvec << endl;
+					cout << TheBoardDetectorLab.getDetectedBoard().Tvec << endl;
+                    CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters);
+                    //draw3dAxisBoardj(TheInputImageCopy,TheBoardDetector2.getDetectedBoard(),TheCameraParameters);
+                    //draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
+                    
+                    
+					Mat R33forLab;
+					
+					cv::Rodrigues(TheBoardDetectorLab.getDetectedBoard().Rvec,R33forLab); 
+					// takes the 1 by 3 and stores it as a 3 by 3 in R33forLab
+					
+					cout << "R33 for lab" << endl << R33forLab << endl;
+					
+					if ( probDetect>0.2)   { // if we detected the sensor board
+						cout << TheBoardDetector.getDetectedBoard().Rvec << endl;
+						cout << TheBoardDetector.getDetectedBoard().Tvec << endl;
+						
+						
+						Mat R33forSensorSideNumber1;
+						cv::Rodrigues(TheBoardDetector.getDetectedBoard().Rvec,R33forSensorSideNumber1);
+						cout << R33forSensorSideNumber1 << endl;
+						
+						Mat blah = (Mat_<float>(3,1) << 0, 10, 0); // Column vector
+						
+						
+						Mat afterDouble; 
+						afterDouble = R33forLab.inv() * (R33forSensorSideNumber1 * blah); //inversion method
+						//WORKS!!!
+						//YAY!!!
+						
+						//version 1
+						//Mat translationStuff = TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec;
+						//version 2
+						Mat translationStuff = TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec;
+						
+						cout << endl << endl << "Translation stuff" << translationStuff << endl << endl;
+						
+						//ACTUALLY PUT THIS IN HERE ----afterDouble
+						Mat toShow = (Mat_<float>(1,6) <<   // First, X Y Z location
+						10.0*translationStuff.at<float>(0,0), 
+						 10.0*translationStuff.at<float>(0,1), 
+						  10.0*translationStuff.at<float>(0,2),
+						afterDouble.at<float>(0,0),
+						 afterDouble.at<float>(0,1),
+						  afterDouble.at<float>(0,2)); // Column vector for Bx By Bz
+						
+						drawVecAtPos(TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters,toShow, "testing");
+						
+						
+						if (0 == 1){
+							Mat oneVect = (Mat_<float>(6,1) << atof(argv[6]), atof(argv[7]), atof(argv[8]), atof(argv[9]), atof(argv[10]), atof(argv[11]) ); // Column vector
+							CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
+							drawVecAtPos(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters,oneVect,"awesome");
+						}
+						
+						//draw3dAxisBoardj(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
+						//draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
+					}
+				}
+					
             }
+        
             //DONE! Easy, right?
 
             //show input with augmented information and  the thresholded image
@@ -386,14 +433,17 @@ void cvTackBarEvents(int pos,void*)
     ThresParam2=iThresParam2;
     TheBoardDetector.getMarkerDetector().setThresholdParams(ThresParam1,ThresParam2);
     TheBoardDetector2.getMarkerDetector().setThresholdParams(ThresParam1,ThresParam2);
+    TheBoardDetectorLab.getMarkerDetector().setThresholdParams(ThresParam1,ThresParam2);
 //recompute
 //Detection of the board
     float probDetect=TheBoardDetector.detect( TheInputImage);
     float probDetect2=TheBoardDetector2.detect( TheInputImage);
+    float probDetectLab=TheBoardDetectorLab.detect( TheInputImage);
     if (TheCameraParameters.isValid() && probDetect>0.2)
     {
         aruco::CvDrawingUtils::draw3dAxis(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
-        aruco::CvDrawingUtils::draw3dAxis(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
+        aruco::CvDrawingUtils::draw3dAxis(TheInputImageCopy,TheBoardDetector2.getDetectedBoard(),TheCameraParameters);
+        aruco::CvDrawingUtils::draw3dAxis(TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters);
 	}
 
     cv::imshow("in",TheInputImageCopy);
