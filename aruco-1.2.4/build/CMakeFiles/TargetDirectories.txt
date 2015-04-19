@@ -1,0 +1,10 @@
+/home/elabbiglubu/aruco-1.2.4/build/src/CMakeFiles/aruco.dir
+/home/elabbiglubu/aruco-1.2.4/build/utils/CMakeFiles/aruco_board_pix2meters.dir
+/home/elabbiglubu/aruco-1.2.4/build/utils/CMakeFiles/aruco_create_board.dir
+/home/elabbiglubu/aruco-1.2.4/build/utils/CMakeFiles/aruco_create_marker.dir
+/home/elabbiglubu/aruco-1.2.4/build/utils/CMakeFiles/aruco_selectoptimalmarkers.dir
+/home/elabbiglubu/aruco-1.2.4/build/utils/CMakeFiles/aruco_simple.dir
+/home/elabbiglubu/aruco-1.2.4/build/utils/CMakeFiles/aruco_simple_board.dir
+/home/elabbiglubu/aruco-1.2.4/build/utils/CMakeFiles/aruco_test.dir
+/home/elabbiglubu/aruco-1.2.4/build/utils/CMakeFiles/aruco_test_board.dir
+/home/elabbiglubu/aruco-1.2.4/build/CMakeFiles/uninstall.dir
