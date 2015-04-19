@@ -320,8 +320,8 @@ int main(int argc,char **argv)
                 if ( probDetect>0.2)   {
 					cout << TheBoardDetector.getDetectedBoard().Rvec << endl;
 					cout << TheBoardDetector.getDetectedBoard().Tvec << endl;
-					Mat oneVect = (Mat_<float>(6,1) << argv[6], argv[7], argv[8], argv[9], argv[10], argv[11], ); // Column vector
-                    //CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
+					Mat oneVect = (Mat_<float>(6,1) << atof(argv[6]), atof(argv[7]), atof(argv[8]), atof(argv[9]), atof(argv[10]), atof(argv[11]) ); // Column vector
+                    CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
                     drawVecAtPos(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters,oneVect);
                     //draw3dAxisBoardj(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
                     //draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
@@ -329,7 +329,7 @@ int main(int argc,char **argv)
                 if ( probDetect2>0.2)   {
 					cout << TheBoardDetector2.getDetectedBoard().Rvec << endl;
 					cout << TheBoardDetector2.getDetectedBoard().Tvec << endl;
-                    //CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector2.getDetectedBoard(),TheCameraParameters);
+                    CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector2.getDetectedBoard(),TheCameraParameters);
                     //draw3dAxisBoardj(TheInputImageCopy,TheBoardDetector2.getDetectedBoard(),TheCameraParameters);
                     //draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
                 }

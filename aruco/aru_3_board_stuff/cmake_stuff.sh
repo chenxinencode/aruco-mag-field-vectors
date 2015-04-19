@@ -8,9 +8,11 @@ make
 
 
 mkdir td
+cp ~/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/input_data_files/aru_testdata/single/intrinsics.yml ./td/
 
-cp /home/elabbiglubu/Downloads/aru_testdata/single/intrinsics.yml ./td/
-cp ~/Desktop/all_final_proj_files/aruco-1.2.4/build/utils/22boardfiles/* ./td/
+cp ~/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/input_data_files/22boardfiles/* ./td/
+
+
 
 ##cp /home/elabbiglubu/Downloads/aru_testdata/board/* ./td/
 ##./based_on_aruco_test ./td/image-test.png ./td/board_meters.yml ./td/intrinsics.yml 0.039
