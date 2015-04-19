@@ -10,6 +10,10 @@ git clone url/etc/stuff
 
 every time to send:
 git add filename.txt
+or
+git add .
+
+
 git commit -m "message goes here"
 git push
 
