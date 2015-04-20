@@ -4,7 +4,7 @@ SET(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 SET(CMAKE_DEPENDS_CHECK_CXX
-  "/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/based_on_aruco_test.cpp" "/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/build/CMakeFiles/based_on_aruco_test.dir/based_on_aruco_test.cpp.o"
+  "/home/ausername/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/based_on_aruco_test.cpp" "/home/ausername/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/build/CMakeFiles/based_on_aruco_test.dir/based_on_aruco_test.cpp.o"
   )
 SET(CMAKE_CXX_COMPILER_ID "GNU")
 

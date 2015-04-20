@@ -69,7 +69,7 @@ void cvTackBarEvents(int pos,void*);
 pair<double,double> AvrgTime(0,0) ;//determines the average time required for detection
 double ThresParam1,ThresParam2;
 int iThresParam1,iThresParam2;
-int waitTime=100;
+int waitTime=0;
 
 bool badflag = false;
 
@@ -171,17 +171,17 @@ void drawVecAtPos(cv::Mat &Image,Board &B,const CameraParameters &CP, cv::Mat &l
 
 void drawVecsAtPosTesting(cv::Mat &Image,Board &B,const CameraParameters &CP,cv::Mat &locationData)
 {
-  cout << locationData.rows<<endl;
+  //cout << locationData.rows<<endl;
   float size=1;//m.ssize*1;
     Mat objectPoints (2,3,CV_32FC1);
-    for (unsigned int vecnum=0; vecnum < 2; vecnum++) {
+    for (unsigned int vecnum=0; vecnum < locationData.rows; vecnum++) {
 		//cout << locationData.at<float>(0,0) << endl;
 		//cout << locationData.at<float>(0,1) << endl;
 		//cout << locationData.at<float>(0,2) << endl;
 		//cout << locationData.at<float>(1,0) << endl;
 		//cout << locationData.at<float>(1,1) << endl;
 		//cout << locationData.at<float>(1,2) << endl;
-		
+		//cout <<locationData<<"and vecnum"<<vecnum<<endl;
 		
 		//cout << endl<< endl<< endl<< endl<< endl<< endl;
 		
@@ -202,8 +202,11 @@ void drawVecsAtPosTesting(cv::Mat &Image,Board &B,const CameraParameters &CP,cv:
 	// note syntax...
 	// void line(Mat& img, Point pt1, Point pt2, const Scalar& color,        int thickness=1, int lineType=8,  int shift=0)
 	// void arrowedLine(Mat& img, Point pt1, Point pt2, const Scalar& color, int thickness=1, int line_type=8, int shift=0, double tipLength=0.1)
-
-		arrowedLine(Image,imagePoints[0],imagePoints[1],Scalar(255,255,255,255),1,CV_AA);
+		cout <<100.0*objectPoints.at<float>(0,2)<<endl;
+		int aThing = (int)100.0*objectPoints.at<float>(0,2);
+		cout <<"athing"<<aThing<<endl;
+		arrowedLine(Image,imagePoints[0],imagePoints[1],Scalar(255,255,255,255),abs(aThing), //normally 1 for thickness
+		CV_AA);
 		//putText(Image,"awesome", imagePoints[1],FONT_HERSHEY_SIMPLEX, 0.6, Scalar(255,255,255,255),2);
 	}
 }
@@ -224,10 +227,16 @@ bool readArguments ( int argc,char **argv )
         TheIntrinsicFile=argv[5];
     //if (argc>=7)
 		//useArduino=argv[6];
-		if (argv[6] == "r")
+		if (atoi(argv[6]) == 1)
+		{
 			recording = true;
-		else if(argv[6] == "v")
+			waitTime = 100;
+		}
+		else if(atoi(argv[6]) == 0)
+		{
 			recording = false;
+			waitTime = 10;
+		}
 		else
 			cerr<<"WAT"<<endl;
 			
@@ -285,6 +294,7 @@ int main(int argc,char **argv)
 
 		
 		string demoFile  = "../../intermediate_data_files/vectors_to_show_in_final_step.yml"; // FIX THIS
+		//string demoFile = "~/vectors_to_show_in_final_step.yml";
 
 		FileStorage fsDemo( demoFile, FileStorage::READ);
 		//fsDemo["oneVect"] >> oneVect;
@@ -431,7 +441,7 @@ int main(int argc,char **argv)
                     //draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
                 }
                 else
-                {if (recording == true) cerr << "Can't see board 1.\n";}
+                {if (recording == true) {cerr << "Can't see board 1.\n";}}
                 
 					
 
@@ -465,7 +475,6 @@ int main(int argc,char **argv)
 					
 					drawVecsAtPosTesting(TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters,someVects);
 				}
-				
 				
 				
 				
@@ -552,11 +561,11 @@ int main(int argc,char **argv)
 						
 						
 						
-						//cout<<"THIS"<<endl<<processedInFromArduino<<endl<<endl;
+						cerr<<"THIS"<<endl<<processedInFromArduino<<endl<<endl;
 						Mat processedInFromArduinoCOPY = (processedInFromArduino*1.0) - 512.0;
-						//cout<<"minus qui COPY"<<endl<<processedInFromArduino<<endl<<endl;
+						cerr<<"minus qui COPY"<<endl<<processedInFromArduino<<endl<<endl;
 						processedInFromArduinoCOPY = scaleFactorForVectors*processedInFromArduinoCOPY;
-						//cout<<"THIS"<<endl<<processedInFromArduinoCOPY<<endl<<endl;
+						cerr<<"THIS"<<endl<<processedInFromArduinoCOPY<<endl<<endl;
 						
 						
 						
