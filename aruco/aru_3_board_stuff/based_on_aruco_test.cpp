@@ -31,6 +31,13 @@ or implied, of Rafael Muñoz Salinas.
 #include <opencv2/opencv.hpp>
 #include <aruco/aruco.h>
 #include <aruco/cvdrawingutils.h>
+
+
+#include "./cArduinoSOURCE/cArduino.cpp"
+
+#include <thread>         // std::this_thread::sleep_for
+#include <chrono>         // std::chrono::seconds
+
 using namespace cv;
 using namespace aruco;
 
@@ -60,9 +67,9 @@ void cvTackBarEvents(int pos,void*);
 pair<double,double> AvrgTime(0,0) ;//determines the average time required for detection
 double ThresParam1,ThresParam2;
 int iThresParam1,iThresParam2;
-int waitTime=0;
+int waitTime=100;
 
-
+cArduino arduino(ArduinoBaundRate::B9600bps);
 
 
 /************************************
@@ -96,15 +103,8 @@ void drawVecAtPosOLDJUSTFORMARKERS(cv::Mat &Image,Marker &m,const CameraParamete
 
   float size=m.ssize*1;
     Mat objectPoints (2,3,CV_32FC1);
-    //cout << locationData.at<float>(0,0) << endl;
-    //cout << locationData.at<float>(0,1) << endl;
-    //cout << locationData.at<float>(0,2) << endl;
-    //cout << locationData.at<float>(1,0) << endl;
-    //cout << locationData.at<float>(1,1) << endl;
-    //cout << locationData.at<float>(1,2) << endl;
     
     
-    //cout << endl<< endl<< endl<< endl<< endl<< endl;
     
     //location of tail (x y z)
     objectPoints.at<float>(0,0)=size*locationData.at<float>(0,0); 
@@ -134,15 +134,8 @@ void drawVecAtPos(cv::Mat &Image,Board &B,const CameraParameters &CP, cv::Mat &l
 	
 	float size=B[0].ssize*1;
     Mat objectPoints (2,3,CV_32FC1);
-    //cout << locationData.at<float>(0,0) << endl;
-    //cout << locationData.at<float>(0,1) << endl;
-    //cout << locationData.at<float>(0,2) << endl;
-    //cout << locationData.at<float>(1,0) << endl;
-    //cout << locationData.at<float>(1,1) << endl;
-    //cout << locationData.at<float>(1,2) << endl;
     
     
-    //cout << endl<< endl<< endl<< endl<< endl<< endl;
     
     //location of tail (x y z)
     objectPoints.at<float>(0,0)=size*locationData.at<float>(0,0); 
@@ -221,6 +214,15 @@ void processKey(char k) {
  ************************************/
 int main(int argc,char **argv)
 {
+	if(!arduino.isOpen())
+	{
+		std::cerr<<"can't open arduino"<<endl;
+		return 1;
+	}
+
+	std::cout<<"arduino open at "<<arduino.getDeviceName()<<endl;
+
+	
     try
     {
         if (  readArguments (argc,argv)==false) return 0;
@@ -231,15 +233,15 @@ int main(int argc,char **argv)
         //read from camera or from  file
         if (TheInputVideo=="live") {
             TheVideoCapturer.open(0);
-            waitTime=10;
+            //waitTime=100;
         }
         else if (TheInputVideo=="live0") {
             TheVideoCapturer.open(0);
-            waitTime=10;
+            //waitTime=100;
         }
         else if (TheInputVideo=="live1") {
             TheVideoCapturer.open(1);
-            waitTime=10;
+            //waitTime=100;
         }
         
         else TheVideoCapturer.open(TheInputVideo);
@@ -297,36 +299,79 @@ int main(int argc,char **argv)
             //chekc the speed by calculating the mean speed of all iterations
             AvrgTime.first+=((double)getTickCount()-tick)/getTickFrequency();
             AvrgTime.second++;
-            cout<<"Time detection="<<1000*AvrgTime.first/AvrgTime.second<<" milliseconds"<<endl;
+            //uncomment to see detection time
+            //cout<<"Time detection="<<1000*AvrgTime.first/AvrgTime.second<<" milliseconds"<<endl;
+            
             //print marker borders
             //for (unsigned int i=0;i<TheBoardDetector.getDetectedMarkers().size();i++)
             //    TheBoardDetector.getDetectedMarkers()[i].draw(TheInputImageCopy,Scalar(0,0,255),1);
 
             //print board
-             if (TheCameraParameters.isValid()) {
+            if (TheCameraParameters.isValid()) {
+				
                 if ( probDetect>0.2)   {
-					cout << TheBoardDetector.getDetectedBoard().Rvec << endl;
-					cout << TheBoardDetector.getDetectedBoard().Tvec << endl;
+					
 					//Mat oneVect = (Mat_<float>(6,1) << atof(argv[6]), atof(argv[7]), atof(argv[8]), atof(argv[9]), atof(argv[10]), atof(argv[11]) ); // Column vector
                     CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
                     //drawVecAtPos(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters,oneVect,"awesome");
                     //draw3dAxisBoardj(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
                     //draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
                 }
+                else
+                {cerr << "Can't see board 1.\n";}
+                
+					
+
                 if ( probDetect2>0.2)   {
-					cout << TheBoardDetector2.getDetectedBoard().Rvec << endl;
-					cout << TheBoardDetector2.getDetectedBoard().Tvec << endl;
+					
                     CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector2.getDetectedBoard(),TheCameraParameters);
                     //draw3dAxisBoardj(TheInputImageCopy,TheBoardDetector2.getDetectedBoard(),TheCameraParameters);
                     //draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
                 }
+                else
+                {
+					//cerr << "Can't see board 2.\n";
+				}
                 if ( probDetectLab>0.2)   {  // If we detected the lab frame board 
+					CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters);
+				}
+				else
+				{cerr << "Can't see board Lab.\n";}
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				if ( probDetectLab>0.2 && probDetect>0.2) // detected lab board and board1
+				{
+					//cout << "Board 2:" << endl;
+					//cout << TheBoardDetector2.getDetectedBoard().Rvec << endl;
+					//cout << TheBoardDetector2.getDetectedBoard().Tvec << endl;
+					
+					
+					cout << "Board Lab:" << endl;
 					//cout << TheBoardDetectorLab.getDetectedBoard().Rvec << endl;
 					cout << "LAB TVEC" << endl<< TheBoardDetectorLab.getDetectedBoard().Tvec << endl<< endl<< endl;
-                    CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters);
-                    //draw3dAxisBoardj(TheInputImageCopy,TheBoardDetector2.getDetectedBoard(),TheCameraParameters);
-                    //draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
                     
+                    
+                    cout << "Board 1:" << endl;
+					cout << TheBoardDetector.getDetectedBoard().Rvec << endl;
+					cout << TheBoardDetector.getDetectedBoard().Tvec << endl;
                     
 					Mat R33forLab;
 					
@@ -335,56 +380,52 @@ int main(int argc,char **argv)
 					
 					cout << "R33 for lab" << endl << R33forLab << endl;
 					
-					if ( probDetect>0.2)   { // if we detected the sensor board
-						cout << TheBoardDetector.getDetectedBoard().Rvec << endl;
-						cout << TheBoardDetector.getDetectedBoard().Tvec << endl;
-						
-						
-						Mat R33forSensorSideNumber1;
-						cv::Rodrigues(TheBoardDetector.getDetectedBoard().Rvec,R33forSensorSideNumber1);
-						cout << R33forSensorSideNumber1 << endl;
-						
-						Mat blah = (Mat_<float>(3,1) << 0, 4, 0); // Column vector
-						
-						
-						Mat afterDouble; 
-						afterDouble = R33forLab.inv() * (R33forSensorSideNumber1 * blah); //inversion method
-						//WORKS!!!
-						//YAY!!!
-						
-						//version 1
-						Mat translationStuff = TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec;
-						//version 2
-						//Mat translationStuff = TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec;
-						
-						cout << endl << endl << "Translation stuff" << translationStuff << endl << endl;
-						
-						//ACTUALLY PUT THIS IN HERE ----afterDouble
-						Mat toShow = (Mat_<float>(1,6) <<   // First, X Y Z location
-						translationStuff.at<float>(0,0), 
-						 translationStuff.at<float>(0,1), 
-						  translationStuff.at<float>(0,2),
-						afterDouble.at<float>(0,0),
-						 afterDouble.at<float>(0,1),
-						  afterDouble.at<float>(0,2)); // Column vector for Bx By Bz
-						
-						drawVecAtPos(TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters,toShow, "testing");
-						
-						
-						if (0 == 1){
-							//Mat oneVect = (Mat_<float>(6,1) << atof(argv[6]), atof(argv[7]), atof(argv[8]), atof(argv[9]), atof(argv[10]), atof(argv[11]) ); // Column vector
-							CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
-							//drawVecAtPos(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters,oneVect,"awesome");
-						}
-						
-						//draw3dAxisBoardj(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
-						//draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
-					}
-				}
 					
-            }
-            
-            
+					cout << TheBoardDetector.getDetectedBoard().Rvec << endl;
+					cout << TheBoardDetector.getDetectedBoard().Tvec << endl;
+					
+					
+					Mat R33forSensorSideNumber1;
+					cv::Rodrigues(TheBoardDetector.getDetectedBoard().Rvec,R33forSensorSideNumber1);
+					cout << R33forSensorSideNumber1 << endl;
+					
+					Mat blah = (Mat_<float>(3,1) << 0, 4, 0); // Column vector
+					
+					
+					Mat afterDouble; 
+					afterDouble = R33forLab.inv() * (R33forSensorSideNumber1 * blah); //inversion method
+					//WORKS!!!
+					//YAY!!!
+					
+					//version 1
+					Mat translationStuff = TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec;
+					//version 2
+					//Mat translationStuff = TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec;
+					
+					cout << endl << endl << "Translation stuff" << translationStuff << endl << endl;
+					
+					//ACTUALLY PUT THIS IN HERE ----afterDouble
+					Mat toShow = (Mat_<float>(1,6) <<   // First, X Y Z location
+					translationStuff.at<float>(0,0), 
+					 translationStuff.at<float>(0,1), 
+					  translationStuff.at<float>(0,2),
+					afterDouble.at<float>(0,0),
+					 afterDouble.at<float>(0,1),
+					  afterDouble.at<float>(0,2)); // Column vector for Bx By Bz
+					
+					drawVecAtPos(TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters,toShow, "testing");
+					
+					
+					if (0 == 1){
+						//Mat oneVect = (Mat_<float>(6,1) << atof(argv[6]), atof(argv[7]), atof(argv[8]), atof(argv[9]), atof(argv[10]), atof(argv[11]) ); // Column vector
+						CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
+						//drawVecAtPos(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters,oneVect,"awesome");
+					}
+					
+					//draw3dAxisBoardj(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
+					//draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
+					
+					/*
             //time date stuff, copied from project2
             //needs to have sub-second timing 
 				std::time_t result = std::time(NULL); //nullptr);
@@ -395,7 +436,22 @@ int main(int argc,char **argv)
 
 				cout<<endl; // <<endl<<endl;
 				
+				*/
 				
+				
+				
+                string inFromArduino = arduino.read();
+                arduino.flush();
+				
+				cout << inFromArduino;
+					
+				}
+				//END DETECTED LAB BOARD AND BOARD 1
+			}
+					
+		
+            
+            
 				
 				
         
@@ -422,10 +478,41 @@ int main(int argc,char **argv)
 // 			 cv::imshow("TheInputImageCopy",TheInputImageCopy);
 
             }
+            
+            
+            
+            
+            
+            // as per http://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
+            // SCREW YOU C++ FOR STUPID STRING MANAGEMENT >_<
+            // but thank you internet for solutions
+           
+            //std::string s = "scott>=tiger>=mushroom";
+			//std::string delimiter = ">=";
+			
+			//size_t pos = 0;
+			
+			//std::string token;
+			//while ((pos = s.find(delimiter)) != std::string::npos) {
+			//	token = s.substr(0, pos);
+			//	std::cout << token;
+				
+			//	s.erase(0, pos + delimiter.length());
+			//}
+			//std::cout << s << std::endl;
+
+
+
+
+
+			//std::this_thread::sleep_for (std::chrono::seconds(1));
+
+
 
             key=cv::waitKey(waitTime);//wait for key to be pressed
             processKey(key);
-        }
+        } 
+        // END WHILE LOOP
 
 
     } catch (std::exception &ex)
