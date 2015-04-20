@@ -8,7 +8,7 @@ function quiver3AR(x,y,z,u,v,w)
     w = w(:);
     
     % Write beginning stuff
-    fid = fopen('../intermediate_data_files/vectors_to_show_in_final_step.yml','w');
+    fid = fopen('~/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/intermediate_data_files/vectors_to_show_in_final_step.yml','w');
     tot =       '%%YAML:1.0\n'; % this will output as a single percent sign.
     tot = [tot, '    oneVect: !!opencv-matrix\n       rows: 1\n       cols:6\n       dt: f\n       data: [0,0,0,0,0,0]\n\n'];
     tot = [tot, '    someVects: !!opencv-matrix\n'];

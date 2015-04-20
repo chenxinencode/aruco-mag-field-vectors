@@ -60,6 +60,8 @@ BoardDetector TheBoardDetector;
 BoardDetector TheBoardDetector2;
 BoardDetector TheBoardDetectorLab;
 
+float scaleFactorForVectors = 0.001;
+
 string TheOutVideoFilePath;
 cv::VideoWriter VWriter;
 
@@ -69,7 +71,10 @@ double ThresParam1,ThresParam2;
 int iThresParam1,iThresParam2;
 int waitTime=100;
 
-cArduino arduino(ArduinoBaundRate::B9600bps);
+bool badflag = false;
+
+Mat processedInFromArduinoLastTime = (Mat_<float>(3,1) << 0, 0, 0);
+
 
 
 /************************************
@@ -132,7 +137,8 @@ void drawVecAtPosOLDJUSTFORMARKERS(cv::Mat &Image,Marker &m,const CameraParamete
 void drawVecAtPos(cv::Mat &Image,Board &B,const CameraParameters &CP, cv::Mat &locationData, string toWrite)
 {
 	
-	float size=B[0].ssize*1;
+	float size=1; // B[0].ssize*1;
+	
     Mat objectPoints (2,3,CV_32FC1);
     
     
@@ -175,10 +181,12 @@ bool readArguments ( int argc,char **argv )
     TheBoardConfigFileLab=argv[4];
     if (argc>=6)
         TheIntrinsicFile=argv[5];
-    if (argc>=7)
-        TheMarkerSize1=atof(argv[6]);
+    //if (argc>=7)
+		//useArduino=argv[6];
     if (argc>=8)
-        TheMarkerSizeLab=atof(argv[7]);
+        TheMarkerSize1=atof(argv[7]);
+    if (argc>=9)
+        TheMarkerSizeLab=atof(argv[8]);
     
     //if (argc>=7)
     //    TheOutVideoFilePath=argv[6];
@@ -214,17 +222,25 @@ void processKey(char k) {
  ************************************/
 int main(int argc,char **argv)
 {
+	Mat hey = (Mat_<float>(3,1) << -42, -43, -44);
+
+		cout << fabs(hey.at<float>(0,1)) <<endl;
+
+	cArduino arduino(ArduinoBaundRate::B9600bps);
+	
 	if(!arduino.isOpen())
 	{
 		std::cerr<<"can't open arduino"<<endl;
-		return 1;
+		//return 1;
+	}
+	else
+	{
+		std::cout<<"arduino open at "<<arduino.getDeviceName()<<endl;
 	}
 
-	std::cout<<"arduino open at "<<arduino.getDeviceName()<<endl;
-
 	
-    try
-    {
+    //try
+    //{
         if (  readArguments (argc,argv)==false) return 0;
 //parse arguments
         TheBoardConfig.readFromFile(TheBoardConfigFile);
@@ -364,45 +380,130 @@ int main(int argc,char **argv)
 					//cout << TheBoardDetector2.getDetectedBoard().Tvec << endl;
 					
 					
-					cout << "Board Lab:" << endl;
-					//cout << TheBoardDetectorLab.getDetectedBoard().Rvec << endl;
-					cout << "LAB TVEC" << endl<< TheBoardDetectorLab.getDetectedBoard().Tvec << endl<< endl<< endl;
-                    
-                    
-                    cout << "Board 1:" << endl;
-					cout << TheBoardDetector.getDetectedBoard().Rvec << endl;
-					cout << TheBoardDetector.getDetectedBoard().Tvec << endl;
+					
                     
 					Mat R33forLab;
 					
 					cv::Rodrigues(TheBoardDetectorLab.getDetectedBoard().Rvec,R33forLab); 
 					// takes the 1 by 3 and stores it as a 3 by 3 in R33forLab
 					
-					cout << "R33 for lab" << endl << R33forLab << endl;
+					//cout << "R33 for lab" << endl << R33forLab << endl;
 					
 					
-					cout << TheBoardDetector.getDetectedBoard().Rvec << endl;
-					cout << TheBoardDetector.getDetectedBoard().Tvec << endl;
+					//cout << TheBoardDetector.getDetectedBoard().Rvec << endl;
+					//cout << TheBoardDetector.getDetectedBoard().Tvec << endl;
 					
 					
 					Mat R33forSensorSideNumber1;
 					cv::Rodrigues(TheBoardDetector.getDetectedBoard().Rvec,R33forSensorSideNumber1);
-					cout << R33forSensorSideNumber1 << endl;
+					//cout << R33forSensorSideNumber1 << endl;
 					
-					Mat blah = (Mat_<float>(3,1) << 0, 4, 0); // Column vector
+					
+					
+					
+					
+					string inFromArduino;
+					if(arduino.isOpen())
+					{
+					
+						inFromArduino = arduino.read();
+						arduino.flush();
+						
+						
+					}
+					cout << inFromArduino;
+					
+					Mat processedInFromArduino = (Mat_<float>(3,1) << 1024, 1024, 1024); // Column vector
+					
+					
+					// as per http://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
+					// SCREW YOU C++ FOR STUPID STRING MANAGEMENT >_<
+					// but thank you internet for solutions
+				   
+					//std::string s = inFromArduino; // "scott>=tiger>=mushroom";
+					//inFromArduino = "scott,tiger,mushroom";
+					
+					try
+					{
+						std::string delimiter = ","; //">=";
+						
+						size_t pos = 0;
+						int stupidcounterforarduinostuff = 0;
+						std::string token;
+						while ((pos = inFromArduino.find(delimiter)) != std::string::npos) {
+							token = inFromArduino.substr(0, pos);
+							
+							//std::cout << "token" << (stof(token)/10)<<endl;
+							
+							//cout << "Before "<< processedInFromArduino.at<float>(stupidcounterforarduinostuff,0)<<endl; // stupidcounterforarduinostuff,0) <<endl;
+							
+							
+							processedInFromArduino.at<float>(stupidcounterforarduinostuff,0) = stof(token);
+							
+							
+							//cout << "after " << processedInFromArduino.at<float>(stupidcounterforarduinostuff,0) << endl;
+							
+							stupidcounterforarduinostuff++;
+							
+							inFromArduino.erase(0, pos + delimiter.length());
+						}
+						processedInFromArduino.at<float>(stupidcounterforarduinostuff,0) = stof(inFromArduino);
+						//std::cout << inFromArduino << std::endl;
+						
+						
+						
+						//cout<<"THIS"<<endl<<processedInFromArduino<<endl<<endl;
+						Mat processedInFromArduinoCOPY = (processedInFromArduino*1.0) - 512.0;
+						//cout<<"minus qui COPY"<<endl<<processedInFromArduino<<endl<<endl;
+						processedInFromArduinoCOPY = scaleFactorForVectors*processedInFromArduinoCOPY;
+						//cout<<"THIS"<<endl<<processedInFromArduinoCOPY<<endl<<endl;
+						
+						
+						
+						
+						if (badflag == false){
+						if (!(processedInFromArduino.at<float>(0,0) == 1024 || // if it does NOT still have ANY of its initial values
+						     processedInFromArduino.at<float>(1,0) == 1024 ||
+						       processedInFromArduino.at<float>(2,0) == 1024))
+						       {
+						
+						//cout<<"THIS"<<endl<<processedInFromArduino<<endl<<endl;
+						processedInFromArduino = (processedInFromArduino*1.0) - 512.0;
+						//cout<<"minus qui"<<endl<<processedInFromArduino<<endl<<endl;
+						processedInFromArduino = scaleFactorForVectors*processedInFromArduino;
+						//cout<<"THIS"<<endl<<processedInFromArduino<<endl<<endl;
+					
+						Mat deriv = processedInFromArduinoLastTime - processedInFromArduino;
+						if (fabs(deriv.at<float>(0,0)) < 3.0 && // if deriv big
+						     fabs(deriv.at<float>(1,0)) < 3.0 &&
+						       fabs(deriv.at<float>(2,0)) < 3.0)
+						       {
+						
+					
 					
 					
 					Mat afterDouble; 
-					afterDouble = R33forLab.inv() * (R33forSensorSideNumber1 * blah); //inversion method
+					afterDouble = R33forLab.inv() * (R33forSensorSideNumber1 * processedInFromArduino); //inversion method
 					//WORKS!!!
 					//YAY!!!
 					
+					
+					
+					//cout << "Board Lab:" << endl;
+					//cout << TheBoardDetectorLab.getDetectedBoard().Rvec << endl;
+					//cout << "LAB TVEC" << endl<< TheBoardDetectorLab.getDetectedBoard().Tvec << endl<< endl<< endl;
+                    
+                    
+                    //cout << "Board 1:" << endl;
+					//cout << TheBoardDetector.getDetectedBoard().Rvec << endl;
+					//cout << "1 TVEC" << TheBoardDetector.getDetectedBoard().Tvec << endl;
+					
 					//version 1
-					Mat translationStuff = TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec;
+					Mat translationStuff = R33forLab.inv()*(TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec);
 					//version 2
 					//Mat translationStuff = TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec;
 					
-					cout << endl << endl << "Translation stuff" << translationStuff << endl << endl;
+					//cout << endl << endl << "Translation stuff" << translationStuff << endl << endl;
 					
 					//ACTUALLY PUT THIS IN HERE ----afterDouble
 					Mat toShow = (Mat_<float>(1,6) <<   // First, X Y Z location
@@ -413,7 +514,35 @@ int main(int argc,char **argv)
 					 afterDouble.at<float>(0,1),
 					  afterDouble.at<float>(0,2)); // Column vector for Bx By Bz
 					
-					drawVecAtPos(TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters,toShow, "testing");
+					cout << endl << toShow <<endl;
+					
+					drawVecAtPos(TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters,toShow, "recording data");
+					} // if deriv small
+					processedInFromArduinoLastTime = processedInFromArduino;
+						
+					}//done with "if not 1024
+					else
+					{
+						cout << "setting badflag true" <<endl;
+						badflag = true;
+					}
+				}// done with if badflag == false
+				else
+				{
+					badflag = false;
+				}
+				
+					}
+					catch (...)
+					{
+						cerr << "SCREEWED" <<endl<<endl<<endl<<endl<<endl;
+						Mat toShow = (Mat_<float>(1,6) << 0,0,0 ,0,0,0);
+						drawVecAtPos(TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters,toShow, "ERROR");
+					}
+					
+					
+					
+					
 					
 					
 					if (0 == 1){
@@ -421,32 +550,89 @@ int main(int argc,char **argv)
 						CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
 						//drawVecAtPos(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters,oneVect,"awesome");
 					}
+						
 					
-					//draw3dAxisBoardj(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
-					//draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
 					
-					/*
-            //time date stuff, copied from project2
-            //needs to have sub-second timing 
-				std::time_t result = std::time(NULL); //nullptr);
-				std::cout // << std::asctime(std::localtime(&result))
-						  << result; // <<  " seconds since the Epoch\n";
-						  
-				// fileOutt << "time" << result ; //<< endl;
-
-				cout<<endl; // <<endl<<endl;
-				
-				*/
-				
-				
-				
-                string inFromArduino = arduino.read();
-                arduino.flush();
-				
-				cout << inFromArduino;
 					
 				}
-				//END DETECTED LAB BOARD AND BOARD 1
+				//END IF DETECTED LAB BOARD AND BOARD 1
+				
+				
+					//string inFromArduino = "243,352,34\n";
+					//std::string delimiter = ","; //">=";
+					
+					//size_t pos = 0;
+					
+					//std::string token;
+					//while ((pos = inFromArduino.find(delimiter)) != std::string::npos) {
+						//token = inFromArduino.substr(0, pos);
+						
+						//std::cout << stof(token)<<endl;
+						
+						//inFromArduino.erase(0, pos + delimiter.length());
+					//}
+					//std::cout << inFromArduino << std::endl;
+					
+					
+					
+					
+					
+					//string inFromArduino;
+					//if(arduino.isOpen())
+					//{
+					
+						//inFromArduino = arduino.read();
+						//arduino.flush();
+						
+						
+					//}
+					//cout << inFromArduino;
+					
+					//Mat processedInFromArduino = (Mat_<float>(3,1) << 1024, 1024, 1024); // Column vector
+					
+					
+					//// as per http://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
+					//// SCREW YOU C++ FOR STUPID STRING MANAGEMENT >_<
+					//// but thank you internet for solutions
+				   
+					////std::string s = inFromArduino; // "scott>=tiger>=mushroom";
+					////inFromArduino = "scott,tiger,mushroom";
+					
+					//try
+					//{
+						//std::string delimiter = ","; //">=";
+						
+						//size_t pos = 0;
+						//int stupidcounterforarduinostuff = 0;
+						//std::string token;
+						//while ((pos = inFromArduino.find(delimiter)) != std::string::npos) {
+							//token = inFromArduino.substr(0, pos);
+							
+							//std::cout << "token" << (stof(token)/10)<<endl;
+							
+							//cout << "Before "<< processedInFromArduino.at<float>(stupidcounterforarduinostuff,0)<<endl; // stupidcounterforarduinostuff,0) <<endl;
+							
+							
+							//processedInFromArduino.at<float>(stupidcounterforarduinostuff,0) = stof(token);
+							
+							
+							//cout << "after " << processedInFromArduino.at<float>(stupidcounterforarduinostuff,0) << endl;
+							
+							//stupidcounterforarduinostuff++;
+							
+							//inFromArduino.erase(0, pos + delimiter.length());
+						//}
+						//processedInFromArduino.at<float>(stupidcounterforarduinostuff,0) = stof(inFromArduino);
+						////std::cout << inFromArduino << std::endl;
+					//}
+					//catch (...)
+					//{
+						//cout << "SCREEWED" <<endl<<endl<<endl<<endl<<endl;
+					//}
+					
+					
+					
+				
 			}
 					
 		
@@ -483,23 +669,7 @@ int main(int argc,char **argv)
             
             
             
-            // as per http://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
-            // SCREW YOU C++ FOR STUPID STRING MANAGEMENT >_<
-            // but thank you internet for solutions
-           
-            //std::string s = "scott>=tiger>=mushroom";
-			//std::string delimiter = ">=";
-			
-			//size_t pos = 0;
-			
-			//std::string token;
-			//while ((pos = s.find(delimiter)) != std::string::npos) {
-			//	token = s.substr(0, pos);
-			//	std::cout << token;
-				
-			//	s.erase(0, pos + delimiter.length());
-			//}
-			//std::cout << s << std::endl;
+            
 
 
 
@@ -515,11 +685,11 @@ int main(int argc,char **argv)
         // END WHILE LOOP
 
 
-    } catch (std::exception &ex)
+    //} catch (std::exception &ex)
 
-    {
-        cout<<"Exception :"<<ex.what()<<endl;
-    }
+    //{
+    //    cout<<"Exception :"<<ex.what()<<endl;
+    //}
 
 }
 /************************************
@@ -541,6 +711,7 @@ void cvTackBarEvents(int pos,void*)
     TheBoardDetectorLab.getMarkerDetector().setThresholdParams(ThresParam1,ThresParam2);
 //recompute
 //Detection of the board
+    /* WHY IS THIS HERE?
     float probDetect=TheBoardDetector.detect( TheInputImage);
     float probDetect2=TheBoardDetector2.detect( TheInputImage);
     float probDetectLab=TheBoardDetectorLab.detect( TheInputImage);
@@ -553,6 +724,7 @@ void cvTackBarEvents(int pos,void*)
 
     cv::imshow("in",TheInputImageCopy);
     cv::imshow("thres",TheBoardDetector.getMarkerDetector().getThresholdedImage());
+    */
 }
 
 

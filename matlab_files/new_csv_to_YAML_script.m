@@ -1,4 +1,4 @@
-fid = fopen('test.txt');
+fid = fopen('~/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/intermediate_data_files/pos_data_from_aruco.csv');
 
 x =[0];
 y =[0];
@@ -8,7 +8,7 @@ By=[0];
 Bz=[0];
 i=1;
 while 1
-	line=fgetl(fid);
+	line=fgetl(fid)
 	if line==-1 
 		fclose (fid);
 		break
@@ -24,3 +24,7 @@ while 1
 end
 
 
+
+
+
+quiver3AR(x, y, z, Bx, By, Bz);
