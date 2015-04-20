@@ -344,7 +344,7 @@ int main(int argc,char **argv)
 						cv::Rodrigues(TheBoardDetector.getDetectedBoard().Rvec,R33forSensorSideNumber1);
 						cout << R33forSensorSideNumber1 << endl;
 						
-						Mat blah = (Mat_<float>(3,1) << 0, 10, 0); // Column vector
+						Mat blah = (Mat_<float>(3,1) << 0, 4, 0); // Column vector
 						
 						
 						Mat afterDouble; 
@@ -353,17 +353,17 @@ int main(int argc,char **argv)
 						//YAY!!!
 						
 						//version 1
-						//Mat translationStuff = TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec;
-						//version 2
 						Mat translationStuff = TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec;
+						//version 2
+						//Mat translationStuff = TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec;
 						
 						cout << endl << endl << "Translation stuff" << translationStuff << endl << endl;
 						
 						//ACTUALLY PUT THIS IN HERE ----afterDouble
 						Mat toShow = (Mat_<float>(1,6) <<   // First, X Y Z location
-						10.0*translationStuff.at<float>(0,0), 
-						 10.0*translationStuff.at<float>(0,1), 
-						  10.0*translationStuff.at<float>(0,2),
+						translationStuff.at<float>(0,0), 
+						 translationStuff.at<float>(0,1), 
+						  translationStuff.at<float>(0,2),
 						afterDouble.at<float>(0,0),
 						 afterDouble.at<float>(0,1),
 						  afterDouble.at<float>(0,2)); // Column vector for Bx By Bz
@@ -383,6 +383,21 @@ int main(int argc,char **argv)
 				}
 					
             }
+            
+            
+            //time date stuff, copied from project2
+            //needs to have sub-second timing 
+				std::time_t result = std::time(NULL); //nullptr);
+				std::cout // << std::asctime(std::localtime(&result))
+						  << result; // <<  " seconds since the Epoch\n";
+						  
+				// fileOutt << "time" << result ; //<< endl;
+
+				cout<<endl; // <<endl<<endl;
+				
+				
+				
+				
         
             //DONE! Easy, right?
 

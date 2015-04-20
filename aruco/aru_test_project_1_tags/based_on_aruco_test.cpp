@@ -322,13 +322,6 @@ int main(int argc,char **argv)
 		
 		//end copy-paste from http://stackoverflow.com/questions/11550021/converting-a-mat-file-from-matlab-into-cvmat-matrix-in-opencv
 		
-		Mat blah = (Mat_<float>(3,1) << 10, 20, 30); // Column vector
-
-		Mat multTimes = (Mat_<float>(3,3) << 2,3,4,5,6,7,8,9,11);
-		
-		cout <<blah<<endl;
-		cout <<multTimes<<endl;
-		cout << multTimes*blah <<endl;
 		
 		
 		
