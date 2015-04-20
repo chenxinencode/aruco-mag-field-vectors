@@ -76,6 +76,8 @@ bool badflag = false;
 Mat processedInFromArduinoLastTime = (Mat_<float>(3,1) << 0, 0, 0);
 
 
+bool recording = false;
+
 
 /************************************
  *
@@ -106,7 +108,7 @@ int thickness=1, int line_type=8, int shift=0, double tipLength=0.1)
 void drawVecAtPosOLDJUSTFORMARKERS(cv::Mat &Image,Marker &m,const CameraParameters &CP,cv::Mat &locationData)
 {
 
-  float size=m.ssize*1;
+    float size=m.ssize*1;
     Mat objectPoints (2,3,CV_32FC1);
     
     
@@ -167,6 +169,45 @@ void drawVecAtPos(cv::Mat &Image,Board &B,const CameraParameters &CP, cv::Mat &l
 	
 }
 
+void drawVecsAtPosTesting(cv::Mat &Image,Board &B,const CameraParameters &CP,cv::Mat &locationData)
+{
+  cout << locationData.rows<<endl;
+  float size=1;//m.ssize*1;
+    Mat objectPoints (2,3,CV_32FC1);
+    for (unsigned int vecnum=0; vecnum < 2; vecnum++) {
+		//cout << locationData.at<float>(0,0) << endl;
+		//cout << locationData.at<float>(0,1) << endl;
+		//cout << locationData.at<float>(0,2) << endl;
+		//cout << locationData.at<float>(1,0) << endl;
+		//cout << locationData.at<float>(1,1) << endl;
+		//cout << locationData.at<float>(1,2) << endl;
+		
+		
+		//cout << endl<< endl<< endl<< endl<< endl<< endl;
+		
+		//location of tail (x y z)
+		objectPoints.at<float>(0,0)=size*locationData.at<float>(vecnum,0); 
+		objectPoints.at<float>(0,1)=size*locationData.at<float>(vecnum,1);
+		objectPoints.at<float>(0,2)=size*locationData.at<float>(vecnum,2);
+		
+		
+		// to make these lengths, must offset position of tail
+		objectPoints.at<float>(1,0)=objectPoints.at<float>(0,0) + size*locationData.at<float>(vecnum,3); 
+		objectPoints.at<float>(1,1)=objectPoints.at<float>(0,1) + size*locationData.at<float>(vecnum,4); 
+		objectPoints.at<float>(1,2)=objectPoints.at<float>(0,2) + size*locationData.at<float>(vecnum,5); 
+
+		vector<Point2f> imagePoints;
+		cv::projectPoints( objectPoints, B.Rvec,B.Tvec, CP.CameraMatrix,CP.Distorsion,   imagePoints);
+
+	// note syntax...
+	// void line(Mat& img, Point pt1, Point pt2, const Scalar& color,        int thickness=1, int lineType=8,  int shift=0)
+	// void arrowedLine(Mat& img, Point pt1, Point pt2, const Scalar& color, int thickness=1, int line_type=8, int shift=0, double tipLength=0.1)
+
+		arrowedLine(Image,imagePoints[0],imagePoints[1],Scalar(255,255,255,255),1,CV_AA);
+		//putText(Image,"awesome", imagePoints[1],FONT_HERSHEY_SIMPLEX, 0.6, Scalar(255,255,255,255),2);
+	}
+}
+
 bool readArguments ( int argc,char **argv )
 {
 
@@ -183,6 +224,15 @@ bool readArguments ( int argc,char **argv )
         TheIntrinsicFile=argv[5];
     //if (argc>=7)
 		//useArduino=argv[6];
+		if (argv[6] == "r")
+			recording = true;
+		else if(argv[6] == "v")
+			recording = false;
+		else
+			cerr<<"WAT"<<endl;
+			
+		
+		
     if (argc>=8)
         TheMarkerSize1=atof(argv[7]);
     if (argc>=9)
@@ -222,9 +272,56 @@ void processKey(char k) {
  ************************************/
 int main(int argc,char **argv)
 {
-	Mat hey = (Mat_<float>(3,1) << -42, -43, -44);
+	
+	
+	
+	//begin copy-paste from http://stackoverflow.com/questions/11550021/converting-a-mat-file-from-matlab-into-cvmat-matrix-in-opencv
+		//Mat oneVect;
+		//Mat useVecLat;
+		Mat someVects;
+		//Mat zeroYzero;
 
-		cout << fabs(hey.at<float>(0,1)) <<endl;
+		
+
+		
+		string demoFile  = "../../intermediate_data_files/vectors_to_show_in_final_step.yml"; // FIX THIS
+
+		FileStorage fsDemo( demoFile, FileStorage::READ);
+		//fsDemo["oneVect"] >> oneVect;
+		
+		//fsDemo["oneVect"] >> useVecLat;
+		
+		
+		//fsDemo["oneVect"] >> zeroYzero;
+
+		fsDemo["someVects"] >> someVects;
+
+		
+		//cout << "Print the contents of oneVect:" << endl;
+		//cout << oneVect << endl;
+		cout << someVects<<endl;
+		
+		
+		
+		
+		fsDemo.release(); //close the file
+		
+		//end copy-paste from http://stackoverflow.com/questions/11550021/converting-a-mat-file-from-matlab-into-cvmat-matrix-in-opencv
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//Mat hey = (Mat_<float>(3,1) << -42, -43, -44);
+
+	//	cout << fabs(hey.at<float>(0,1)) <<endl;
 
 	cArduino arduino(ArduinoBaundRate::B9600bps);
 	
@@ -235,7 +332,7 @@ int main(int argc,char **argv)
 	}
 	else
 	{
-		std::cout<<"arduino open at "<<arduino.getDeviceName()<<endl;
+		//cerr<<"arduino open at "<<arduino.getDeviceName()<<endl;
 	}
 
 	
@@ -334,13 +431,13 @@ int main(int argc,char **argv)
                     //draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
                 }
                 else
-                {cerr << "Can't see board 1.\n";}
+                {if (recording == true) cerr << "Can't see board 1.\n";}
                 
 					
 
                 if ( probDetect2>0.2)   {
-					
-                    CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector2.getDetectedBoard(),TheCameraParameters);
+					cerr << "Board 1 in sight!" <<endl;
+                    //CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector2.getDetectedBoard(),TheCameraParameters);
                     //draw3dAxisBoardj(TheInputImageCopy,TheBoardDetector2.getDetectedBoard(),TheCameraParameters);
                     //draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
                 }
@@ -364,6 +461,10 @@ int main(int argc,char **argv)
 				
 				
 				
+				if(recording ==false && probDetectLab>0.2){
+					
+					drawVecsAtPosTesting(TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters,someVects);
+				}
 				
 				
 				
@@ -372,8 +473,7 @@ int main(int argc,char **argv)
 				
 				
 				
-				
-				if ( probDetectLab>0.2 && probDetect>0.2) // detected lab board and board1
+				if ( probDetectLab>0.2 && probDetect>0.2 && recording == true) // detected lab board and board1
 				{
 					//cout << "Board 2:" << endl;
 					//cout << TheBoardDetector2.getDetectedBoard().Rvec << endl;
@@ -411,7 +511,7 @@ int main(int argc,char **argv)
 						
 						
 					}
-					cout << inFromArduino;
+					//cout << inFromArduino;
 					
 					Mat processedInFromArduino = (Mat_<float>(3,1) << 1024, 1024, 1024); // Column vector
 					
@@ -514,7 +614,14 @@ int main(int argc,char **argv)
 					 afterDouble.at<float>(0,1),
 					  afterDouble.at<float>(0,2)); // Column vector for Bx By Bz
 					
-					cout << endl << toShow <<endl;
+					cout <<
+					 toShow.at<float>(0,0) << "," <<
+					 toShow.at<float>(0,1) << "," <<
+					 toShow.at<float>(0,2) << "," <<
+					 toShow.at<float>(0,3) << "," <<
+					 toShow.at<float>(0,4) << "," <<
+					 toShow.at<float>(0,5)
+					 <<endl;
 					
 					drawVecAtPos(TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters,toShow, "recording data");
 					} // if deriv small
@@ -523,7 +630,7 @@ int main(int argc,char **argv)
 					}//done with "if not 1024
 					else
 					{
-						cout << "setting badflag true" <<endl;
+						cerr << "setting badflag true" <<endl;
 						badflag = true;
 					}
 				}// done with if badflag == false
