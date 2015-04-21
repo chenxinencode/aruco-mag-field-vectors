@@ -205,7 +205,7 @@ void drawVecsAtPosTesting(cv::Mat &Image,Board &B,const CameraParameters &CP,cv:
 		cout <<100.0*objectPoints.at<float>(0,2)<<endl;
 		int aThing = (int)100.0*objectPoints.at<float>(0,2);
 		cout <<"athing"<<aThing<<endl;
-		arrowedLine(Image,imagePoints[0],imagePoints[1],Scalar(255,255,255,255),abs(aThing), //normally 1 for thickness
+		arrowedLine(Image,imagePoints[0],imagePoints[1],Scalar(255,255,255,255),1,//abs(aThing), //normally 1 for thickness
 		CV_AA);
 		//putText(Image,"awesome", imagePoints[1],FONT_HERSHEY_SIMPLEX, 0.6, Scalar(255,255,255,255),2);
 	}
