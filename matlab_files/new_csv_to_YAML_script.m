@@ -22,10 +22,10 @@ By = (0.0039*By)-0.0096;
 Bz = (0.0039*Bz)-0.0096;
 %resulting units are millitesla	
 
-%scale it down a bit more ... log style
-Bx = Bx*2 % log(Bx)
-By = By*2 % log(By)
-Bz = Bz*2 % log(Bz)
+%scale it a bit more ... log style
+Bx = Bx*5 % log(Bx)
+By = By*5 % log(By)
+Bz = Bz*5 % log(Bz)
 
 %remember that final result for Bx By Bz will be meters
 
