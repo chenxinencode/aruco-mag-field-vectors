@@ -170,8 +170,13 @@ void drawVecAtPos(cv::Mat &Image,Board &B,const CameraParameters &CP, cv::Mat &l
 	
 }
 
-void drawVecsAtPosTesting(cv::Mat &Image,Board &B,const CameraParameters &CP,cv::Mat &locationData, Mat &SensorTvec)
+void drawVecsAtPosTesting(cv::Mat &Image,Board &B,const CameraParameters &CP,
+	cv::Mat &locationData, Mat &R33forLab, Mat &R33forSensorSideNumber1, Board &BProbe);
 {
+Mat translationStuff = R33forLab.inv()*(TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec);
+
+Mat SensorTvec = TheBoardDetectorLab.getDetectedBoard().Tvec; //MORNING!// this needs to come from a hand-held "sensor" (Probably a BIG 2 by 2 board.)
+	
 	//cerr << SensorTvec <<endl;
 	//cerr << SensorTvec.at<float>(0,2) <<endl;
   //cout << locationData.rows<<endl;
@@ -514,17 +519,13 @@ int main(int argc,char **argv)
 				
 				
 				if(recording ==false && probDetectLab>0.2){
-					
 					Mat R33forLab;
 					cv::Rodrigues(TheBoardDetectorLab.getDetectedBoard().Rvec,R33forLab); 
-					
+
 					Mat R33forSensorSideNumber1; //MORNING!// this needs to be the probe, not sensor side 1
 					cv::Rodrigues(TheBoardDetector.getDetectedBoard().Rvec,R33forSensorSideNumber1);
-					
-					Mat translationStuff = R33forLab.inv()*(TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec);
-					
-					//Mat SensorTvec = TheBoardDetectorLab.getDetectedBoard().Tvec; //MORNING!// this needs to come from a hand-held "sensor" (Probably a BIG 2 by 2 board.)
-					drawVecsAtPosTesting(TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters,someVects,translationStuff);
+
+					drawVecsAtPosTesting(TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters,someVects,R33forLab,R33forSensorSideNumber1, TheBoardDetector.getDetectedBoard());
 				}
 				
 				
