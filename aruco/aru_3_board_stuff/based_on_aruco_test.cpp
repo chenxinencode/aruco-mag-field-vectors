@@ -50,6 +50,7 @@ bool The3DInfoAvailable=false;
 float TheMarkerSize1=-1;
 float TheMarkerSize2=-1;
 float TheMarkerSizeLab=-1;
+float TheMarkerSizeSensor=-1; // HARD CODED 
 VideoCapture TheVideoCapturer;
 Mat TheInputImage,TheInputImageCopy;
 CameraParameters TheCameraParameters;
@@ -169,8 +170,10 @@ void drawVecAtPos(cv::Mat &Image,Board &B,const CameraParameters &CP, cv::Mat &l
 	
 }
 
-void drawVecsAtPosTesting(cv::Mat &Image,Board &B,const CameraParameters &CP,cv::Mat &locationData)
+void drawVecsAtPosTesting(cv::Mat &Image,Board &B,const CameraParameters &CP,cv::Mat &locationData, Mat &SensorTvec)
 {
+	//cerr << SensorTvec <<endl;
+	//cerr << SensorTvec.at<float>(0,2) <<endl;
   //cout << locationData.rows<<endl;
   float size=1;//m.ssize*1;
     Mat objectPoints (2,3,CV_32FC1);
@@ -191,6 +194,15 @@ void drawVecsAtPosTesting(cv::Mat &Image,Board &B,const CameraParameters &CP,cv:
 		objectPoints.at<float>(0,2)=size*locationData.at<float>(vecnum,2);
 		
 		
+		float senx = SensorTvec.at<float>(0,0);
+		float seny = SensorTvec.at<float>(0,1);
+		float senz = SensorTvec.at<float>(0,2);
+		
+		float vecx = objectPoints.at<float>(0,0);
+		float vecy = objectPoints.at<float>(0,1);
+		float vecz = objectPoints.at<float>(0,2);
+		
+		
 		// to make these lengths, must offset position of tail
 		objectPoints.at<float>(1,0)=objectPoints.at<float>(0,0) + size*locationData.at<float>(vecnum,3); 
 		objectPoints.at<float>(1,1)=objectPoints.at<float>(0,1) + size*locationData.at<float>(vecnum,4); 
@@ -202,11 +214,31 @@ void drawVecsAtPosTesting(cv::Mat &Image,Board &B,const CameraParameters &CP,cv:
 	// note syntax...
 	// void line(Mat& img, Point pt1, Point pt2, const Scalar& color,        int thickness=1, int lineType=8,  int shift=0)
 	// void arrowedLine(Mat& img, Point pt1, Point pt2, const Scalar& color, int thickness=1, int line_type=8, int shift=0, double tipLength=0.1)
-		cout <<100.0*objectPoints.at<float>(0,2)<<endl;
+		//cout <<100.0*objectPoints.at<float>(0,2)<<endl;
 		int aThing = (int)100.0*objectPoints.at<float>(0,2);
-		cout <<"athing"<<aThing<<endl;
-		arrowedLine(Image,imagePoints[0],imagePoints[1],Scalar(255,255,255,255),1,//abs(aThing), //normally 1 for thickness
-		CV_AA);
+		//cout <<"athing"<<aThing<<endl;
+		
+		
+		if (sqrt(   (vecx - senx)*(vecx - senx) +
+					(vecy - seny)*(vecy - seny) +
+					(vecz - senz)*(vecz - senz) 
+					)
+					< 0.05){
+			arrowedLine(Image,imagePoints[0],imagePoints[1],Scalar(255,255,255,255),1,//abs(aThing), //normally 1 for thickness
+				CV_AA);
+			}
+			else
+			{
+				arrowedLine(Image,imagePoints[0],imagePoints[1],Scalar(0,0,0,255),1,//abs(aThing), //normally 1 for thickness
+				CV_AA);
+			}
+			
+			//MORNING//
+			fillConvexPoly(Image,,4,Scalar(255,255,255,255)
+		
+		
+		
+		
 		//putText(Image,"awesome", imagePoints[1],FONT_HERSHEY_SIMPLEX, 0.6, Scalar(255,255,255,255),2);
 	}
 }
@@ -355,7 +387,12 @@ int main(int argc,char **argv)
         TheBoardConfigLab.readFromFile(TheBoardConfigFileLab);
         //read from camera or from  file
         if (TheInputVideo=="live") {
-            TheVideoCapturer.open(0);
+
+			TheVideoCapturer.open(1);
+			if (!TheVideoCapturer.isOpened()) {
+				cerr << "I suppose you're on the desktop." <<endl;
+				TheVideoCapturer.open(0);
+			}
             //waitTime=100;
         }
         else if (TheInputVideo=="live0") {
@@ -395,9 +432,9 @@ int main(int argc,char **argv)
 	    TheBoardDetector.setParams(TheBoardConfig,TheCameraParameters,TheMarkerSize1);
 	    TheBoardDetector.getMarkerDetector().getThresholdParams( ThresParam1,ThresParam2);
 	    TheBoardDetector.getMarkerDetector().enableErosion(true);//for chessboards
-	    TheBoardDetector2.setParams(TheBoardConfig2,TheCameraParameters,TheMarkerSize2);
-	    TheBoardDetector2.getMarkerDetector().getThresholdParams( ThresParam1,ThresParam2);
-	    TheBoardDetector2.getMarkerDetector().enableErosion(true);//for chessboards
+	    //TRYING TO SWITCH TO MARKERS//TheBoardDetector2.setParams(TheBoardConfig2,TheCameraParameters,TheMarkerSize2);
+	    //TRYING TO SWITCH TO MARKERS//TheBoardDetector2.getMarkerDetector().getThresholdParams( ThresParam1,ThresParam2);
+	    //TRYING TO SWITCH TO MARKERS//TheBoardDetector2.getMarkerDetector().enableErosion(true);//for chessboards
 	    TheBoardDetectorLab.setParams(TheBoardConfigLab,TheCameraParameters,TheMarkerSizeLab);
 	    TheBoardDetectorLab.getMarkerDetector().getThresholdParams( ThresParam1,ThresParam2);
 	    TheBoardDetectorLab.getMarkerDetector().enableErosion(true);//for chessboards
@@ -417,7 +454,7 @@ int main(int argc,char **argv)
             double tick = (double)getTickCount();//for checking the speed
             //Detection of the board
             float probDetect=TheBoardDetector.detect(TheInputImage);
-            float probDetect2=TheBoardDetector2.detect(TheInputImage);
+            //TRYING TO SWITCH TO MARKERS//float probDetect2=TheBoardDetector2.detect(TheInputImage);
             float probDetectLab=TheBoardDetectorLab.detect(TheInputImage);
             //chekc the speed by calculating the mean speed of all iterations
             AvrgTime.first+=((double)getTickCount()-tick)/getTickFrequency();
@@ -433,7 +470,7 @@ int main(int argc,char **argv)
             if (TheCameraParameters.isValid()) {
 				
                 if ( probDetect>0.2)   {
-					
+					cerr << "Board 1 in sight!" <<endl;
 					//Mat oneVect = (Mat_<float>(6,1) << atof(argv[6]), atof(argv[7]), atof(argv[8]), atof(argv[9]), atof(argv[10]), atof(argv[11]) ); // Column vector
                     CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
                     //drawVecAtPos(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters,oneVect,"awesome");
@@ -441,20 +478,25 @@ int main(int argc,char **argv)
                     //draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
                 }
                 else
+                
+                
                 {if (recording == true) {cerr << "Can't see board 1.\n";}}
                 
 					
 
-                if ( probDetect2>0.2)   {
-					cerr << "Board 1 in sight!" <<endl;
+                //TRYING TO SWITCH TO MARKERS//if ( probDetect2>0.2)   {
+					//TRYING TO SWITCH TO MARKERS//cerr << "Board 2 in sight!" <<endl;
                     //CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector2.getDetectedBoard(),TheCameraParameters);
                     //draw3dAxisBoardj(TheInputImageCopy,TheBoardDetector2.getDetectedBoard(),TheCameraParameters);
                     //draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
-                }
-                else
-                {
+                //TRYING TO SWITCH TO MARKERS//}
+                //TRYING TO SWITCH TO MARKERS//else
+                //TRYING TO SWITCH TO MARKERS//{
 					//cerr << "Can't see board 2.\n";
-				}
+				//TRYING TO SWITCH TO MARKERS//}
+				
+				
+				
                 if ( probDetectLab>0.2)   {  // If we detected the lab frame board 
 					CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters);
 				}
@@ -473,7 +515,16 @@ int main(int argc,char **argv)
 				
 				if(recording ==false && probDetectLab>0.2){
 					
-					drawVecsAtPosTesting(TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters,someVects);
+					Mat R33forLab;
+					cv::Rodrigues(TheBoardDetectorLab.getDetectedBoard().Rvec,R33forLab); 
+					
+					Mat R33forSensorSideNumber1; //MORNING!// this needs to be the probe, not sensor side 1
+					cv::Rodrigues(TheBoardDetector.getDetectedBoard().Rvec,R33forSensorSideNumber1);
+					
+					Mat translationStuff = R33forLab.inv()*(TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec);
+					
+					//Mat SensorTvec = TheBoardDetectorLab.getDetectedBoard().Tvec; //MORNING!// this needs to come from a hand-held "sensor" (Probably a BIG 2 by 2 board.)
+					drawVecsAtPosTesting(TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters,someVects,translationStuff);
 				}
 				
 				
@@ -482,15 +533,9 @@ int main(int argc,char **argv)
 				
 				
 				
-				if ( probDetectLab>0.2 && probDetect>0.2 && recording == true) // detected lab board and board1
+				if ( probDetectLab>0.2  && probDetect>0.2 
+							&& recording == true) // detected lab board and board1
 				{
-					//cout << "Board 2:" << endl;
-					//cout << TheBoardDetector2.getDetectedBoard().Rvec << endl;
-					//cout << TheBoardDetector2.getDetectedBoard().Tvec << endl;
-					
-					
-					
-                    
 					Mat R33forLab;
 					
 					cv::Rodrigues(TheBoardDetectorLab.getDetectedBoard().Rvec,R33forLab); 
@@ -498,18 +543,10 @@ int main(int argc,char **argv)
 					
 					//cout << "R33 for lab" << endl << R33forLab << endl;
 					
-					
-					//cout << TheBoardDetector.getDetectedBoard().Rvec << endl;
-					//cout << TheBoardDetector.getDetectedBoard().Tvec << endl;
-					
-					
+										
 					Mat R33forSensorSideNumber1;
 					cv::Rodrigues(TheBoardDetector.getDetectedBoard().Rvec,R33forSensorSideNumber1);
 					//cout << R33forSensorSideNumber1 << endl;
-					
-					
-					
-					
 					
 					string inFromArduino;
 					if(arduino.isOpen())
@@ -520,9 +557,20 @@ int main(int argc,char **argv)
 						
 						
 					}
+					//tempardfix//
+					inFromArduino = "512,600,512\n";
+					
+					
+					
+					
 					//cout << inFromArduino;
 					
 					Mat processedInFromArduino = (Mat_<float>(3,1) << 1024, 1024, 1024); // Column vector
+					
+					
+					//tempardfix//
+					
+					
 					
 					
 					// as per http://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
@@ -583,7 +631,7 @@ int main(int argc,char **argv)
 						//cout<<"THIS"<<endl<<processedInFromArduino<<endl<<endl;
 					
 						Mat deriv = processedInFromArduinoLastTime - processedInFromArduino;
-						if (fabs(deriv.at<float>(0,0)) < 3.0 && // if deriv big
+						if (fabs(deriv.at<float>(0,0)) < 3.0 && // if deriv is small
 						     fabs(deriv.at<float>(1,0)) < 3.0 &&
 						       fabs(deriv.at<float>(2,0)) < 3.0)
 						       {
@@ -597,20 +645,14 @@ int main(int argc,char **argv)
 					//YAY!!!
 					
 					
+					//
+					//Changed this morning and works
+					//HARD CODED and works
+					Mat initPositionThing = TheBoardDetector.getDetectedBoard().Tvec;
+					Mat offsetForThing = (Mat_<float>(3,1) << 0, 0.05, 0.015); // Column vector
+					initPositionThing = initPositionThing - (R33forSensorSideNumber1*offsetForThing); // changed this morning. plus what?
 					
-					//cout << "Board Lab:" << endl;
-					//cout << TheBoardDetectorLab.getDetectedBoard().Rvec << endl;
-					//cout << "LAB TVEC" << endl<< TheBoardDetectorLab.getDetectedBoard().Tvec << endl<< endl<< endl;
-                    
-                    
-                    //cout << "Board 1:" << endl;
-					//cout << TheBoardDetector.getDetectedBoard().Rvec << endl;
-					//cout << "1 TVEC" << TheBoardDetector.getDetectedBoard().Tvec << endl;
-					
-					//version 1
-					Mat translationStuff = R33forLab.inv()*(TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec);
-					//version 2
-					//Mat translationStuff = TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec;
+					Mat translationStuff = R33forLab.inv()*(initPositionThing - TheBoardDetectorLab.getDetectedBoard().Tvec);
 					
 					//cout << endl << endl << "Translation stuff" << translationStuff << endl << endl;
 					
@@ -633,7 +675,7 @@ int main(int argc,char **argv)
 					 <<endl;
 					
 					drawVecAtPos(TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters,toShow, "recording data");
-					} // if deriv small
+					} // done with if deriv small
 					processedInFromArduinoLastTime = processedInFromArduino;
 						
 					}//done with "if not 1024
@@ -643,7 +685,7 @@ int main(int argc,char **argv)
 						badflag = true;
 					}
 				}// done with if badflag == false
-				else
+				else //so if it is not false, i.e. true, then make it false
 				{
 					badflag = false;
 				}
@@ -651,105 +693,17 @@ int main(int argc,char **argv)
 					}
 					catch (...)
 					{
-						cerr << "SCREEWED" <<endl<<endl<<endl<<endl<<endl;
+						cerr << "Recording error" <<endl;
 						Mat toShow = (Mat_<float>(1,6) << 0,0,0 ,0,0,0);
 						drawVecAtPos(TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters,toShow, "ERROR");
 					}
-					
-					
-					
-					
-					
-					
-					if (0 == 1){
-						//Mat oneVect = (Mat_<float>(6,1) << atof(argv[6]), atof(argv[7]), atof(argv[8]), atof(argv[9]), atof(argv[10]), atof(argv[11]) ); // Column vector
-						CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
-						//drawVecAtPos(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters,oneVect,"awesome");
-					}
-						
-					
-					
 					
 				}
 				//END IF DETECTED LAB BOARD AND BOARD 1
 				
 				
-					//string inFromArduino = "243,352,34\n";
-					//std::string delimiter = ","; //">=";
 					
-					//size_t pos = 0;
-					
-					//std::string token;
-					//while ((pos = inFromArduino.find(delimiter)) != std::string::npos) {
-						//token = inFromArduino.substr(0, pos);
-						
-						//std::cout << stof(token)<<endl;
-						
-						//inFromArduino.erase(0, pos + delimiter.length());
-					//}
-					//std::cout << inFromArduino << std::endl;
-					
-					
-					
-					
-					
-					//string inFromArduino;
-					//if(arduino.isOpen())
-					//{
-					
-						//inFromArduino = arduino.read();
-						//arduino.flush();
-						
-						
-					//}
-					//cout << inFromArduino;
-					
-					//Mat processedInFromArduino = (Mat_<float>(3,1) << 1024, 1024, 1024); // Column vector
-					
-					
-					//// as per http://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
-					//// SCREW YOU C++ FOR STUPID STRING MANAGEMENT >_<
-					//// but thank you internet for solutions
-				   
-					////std::string s = inFromArduino; // "scott>=tiger>=mushroom";
-					////inFromArduino = "scott,tiger,mushroom";
-					
-					//try
-					//{
-						//std::string delimiter = ","; //">=";
-						
-						//size_t pos = 0;
-						//int stupidcounterforarduinostuff = 0;
-						//std::string token;
-						//while ((pos = inFromArduino.find(delimiter)) != std::string::npos) {
-							//token = inFromArduino.substr(0, pos);
-							
-							//std::cout << "token" << (stof(token)/10)<<endl;
-							
-							//cout << "Before "<< processedInFromArduino.at<float>(stupidcounterforarduinostuff,0)<<endl; // stupidcounterforarduinostuff,0) <<endl;
-							
-							
-							//processedInFromArduino.at<float>(stupidcounterforarduinostuff,0) = stof(token);
-							
-							
-							//cout << "after " << processedInFromArduino.at<float>(stupidcounterforarduinostuff,0) << endl;
-							
-							//stupidcounterforarduinostuff++;
-							
-							//inFromArduino.erase(0, pos + delimiter.length());
-						//}
-						//processedInFromArduino.at<float>(stupidcounterforarduinostuff,0) = stof(inFromArduino);
-						////std::cout << inFromArduino << std::endl;
-					//}
-					//catch (...)
-					//{
-						//cout << "SCREEWED" <<endl<<endl<<endl<<endl<<endl;
-					//}
-					
-					
-					
-				
-			}
+			} // end if cam param valid
 					
 		
             
@@ -823,7 +777,7 @@ void cvTackBarEvents(int pos,void*)
     ThresParam1=iThresParam1;
     ThresParam2=iThresParam2;
     TheBoardDetector.getMarkerDetector().setThresholdParams(ThresParam1,ThresParam2);
-    TheBoardDetector2.getMarkerDetector().setThresholdParams(ThresParam1,ThresParam2);
+    //TRYING TO SWITCH TO MARKERS//TheBoardDetector2.getMarkerDetector().setThresholdParams(ThresParam1,ThresParam2);
     TheBoardDetectorLab.getMarkerDetector().setThresholdParams(ThresParam1,ThresParam2);
 //recompute
 //Detection of the board
