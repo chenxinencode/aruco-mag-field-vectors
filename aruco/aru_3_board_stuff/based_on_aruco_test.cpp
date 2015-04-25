@@ -253,47 +253,97 @@ Mat SensorTvec = R33forLab.inv()*(BProbe.Tvec - B.Tvec);
 bool readArguments ( int argc,char **argv )
 {
 
-    if (argc<3) {
-        cerr<<"Invalid number of arguments"<<endl;
+
+
+    if (argc<5) {
+
+        //cerr<<"Invalid number of arguments"<<endl;
         cerr<<"Usage: (in.avi|live) boardConfig.yml [intrinsics.yml] [size] [out]"<<endl;
-        return false;
+        //return false;
+
+        cerr << "Note from Jaime: using defaults" <<endl;
+        string homeFolder = argv[1];
+
+        string inputparamFileName = argv[2];
+
+        FileStorage fsinputparams( inputparamFileName, FileStorage::READ);
+
+        fsinputparams["TheInputVideo"] >> TheInputVideo;
+
+        fsinputparams["TheBoardConfigFile"] >> TheBoardConfigFile;
+        TheBoardConfigFile = homeFolder + TheBoardConfigFile;
+
+        fsinputparams["TheBoardConfigFile2"] >> TheBoardConfigFile2;
+        TheBoardConfigFile2 = homeFolder + TheBoardConfigFile2;
+
+        fsinputparams["TheBoardConfigFileLab"] >> TheBoardConfigFileLab;
+        TheBoardConfigFileLab = homeFolder + TheBoardConfigFileLab;
+
+        fsinputparams["TheIntrinsicFile"] >> TheIntrinsicFile;
+        TheIntrinsicFile = homeFolder + TheIntrinsicFile;
+
+        fsinputparams["recording"] >> recording;
+
+        fsinputparams["TheMarkerSize1"] >> TheMarkerSize1;
+
+        fsinputparams["TheMarkerSizeLab"] >> TheMarkerSizeLab;
+
+        cerr<<TheMarkerSizeLab<<endl;
+
+        fsinputparams.release();
+
+        return true;
     }
-    TheInputVideo=argv[1];
-    TheBoardConfigFile=argv[2];
-    TheBoardConfigFile2=argv[3];
-    TheBoardConfigFileLab=argv[4];
-    if (argc>=6)
-        TheIntrinsicFile=argv[5];
-    //if (argc>=7)
-		//useArduino=argv[6];
-		if (atoi(argv[6]) == 1)
-		{
-			recording = true;
-			waitTime = 100;
-		}
-		else if(atoi(argv[6]) == 0)
-		{
-			recording = false;
-			waitTime = 10;
-		}
-		else
-			cerr<<"WAT"<<endl;
-			
-		
-		
-    if (argc>=8)
-        TheMarkerSize1=atof(argv[7]);
-    if (argc>=9)
-        TheMarkerSizeLab=atof(argv[8]);
-    
-    //if (argc>=7)
-    //    TheOutVideoFilePath=argv[6];
+    else
+    {
 
 
-//    if (argc==5)
-//        cerr<<"NOTE: You need makersize to see 3d info!!!!"<<endl;
 
-    return true;
+
+        TheInputVideo=argv[1];
+        TheBoardConfigFile=argv[2];
+        TheBoardConfigFile2=argv[3];
+        TheBoardConfigFileLab=argv[4];
+        if (argc>=6)
+            TheIntrinsicFile=argv[5];
+        //if (argc>=7)
+            //useArduino=argv[6];
+            if (atoi(argv[6]) == 1)
+            {
+                recording = true;
+
+            }
+            else if(atoi(argv[6]) == 0)
+            {
+                recording = false;
+            }
+            else
+            {
+                cerr<<"Neither recording nor visualizing...???"<<endl;
+                return false;
+            }
+
+
+
+
+        if (argc>=8)
+            TheMarkerSize1=atof(argv[7]);
+        if (argc>=9)
+            TheMarkerSizeLab=atof(argv[8]);
+
+        //if (argc>=7)
+        //    TheOutVideoFilePath=argv[6];
+
+
+    //    if (argc==5)
+    //        cerr<<"NOTE: You need makersize to see 3d info!!!!"<<endl;
+
+        return true;
+    }
+
+
+
+
 }
 
 void processKey(char k) {
@@ -332,32 +382,23 @@ int main(int argc,char **argv)
 		
 
 		
-		string demoFile  = "../../intermediate_data_files/vectors_to_show_in_final_step.yml"; // FIX THIS
+        string vectorsThatWeReadFile  = "../../intermediate_data_files/vectors_to_show_in_final_step.yml"; // FIX THIS
 		//string demoFile = "~/vectors_to_show_in_final_step.yml";
 
-		FileStorage fsDemo( demoFile, FileStorage::READ);
-		//fsDemo["oneVect"] >> oneVect;
-		
-		//fsDemo["oneVect"] >> useVecLat;
-		
-		
-		//fsDemo["oneVect"] >> zeroYzero;
+        FileStorage fsvec( vectorsThatWeReadFile, FileStorage::READ);
 
-		fsDemo["someVects"] >> someVects;
+        fsvec["someVects"] >> someVects;
 
-		
-		//cout << "Print the contents of oneVect:" << endl;
-		//cout << oneVect << endl;
-		//cout << someVects<<endl;
-		
-		
-		
-		
-		fsDemo.release(); //close the file
+        fsvec.release(); //close the file
 		
 		//end copy-paste from http://stackoverflow.com/questions/11550021/converting-a-mat-file-from-matlab-into-cvmat-matrix-in-opencv
 		
-	
+
+
+
+
+
+
 	
 	
 	
@@ -377,6 +418,7 @@ int main(int argc,char **argv)
 	if(!arduino.isOpen())
 	{
 		std::cerr<<"can't open arduino"<<endl;
+
 		//return 1;
 	}
 	else
@@ -388,13 +430,22 @@ int main(int argc,char **argv)
     //try
     //{
         if (  readArguments (argc,argv)==false) return 0;
+
+
+        if (recording)
+            waitTime = 100;
+        else
+            waitTime = 10;
+
+
 //parse arguments
         TheBoardConfig.readFromFile(TheBoardConfigFile);
         TheBoardConfig2.readFromFile(TheBoardConfigFile2);
         TheBoardConfigLab.readFromFile(TheBoardConfigFileLab);
+        cerr<<TheInputVideo<<endl;
         //read from camera or from  file
         if (TheInputVideo=="live") {
-
+            cerr<<"Got this farr far"<<waitTime<<endl;
 			TheVideoCapturer.open(1);
 			if (!TheVideoCapturer.isOpened()) {
 				cerr << "I suppose you're on the desktop." <<endl;

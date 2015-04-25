@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+   <FileVersion major="1" minor="6" />
+   <Project>
+      <Option title="aruco_testproject" />
+      <Option makefile_is_custom="1" />
+      <Option compiler="gcc" />
+      <Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\..\usr\;CMake Files\..\..\..\..\..\..\..\usr\local\;CMake Files\..\..\..\..\..\..\..\usr\local\lib\;CMake Files\..\..\..\..\..\..\..\usr\local\lib\cmake\;" />
+      <Build>
+      <Target title="all">
+         <Option working_dir="/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/Makefile&quot;  VERBOSE=1 all" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="based_on_aruco_test">
+         <Option output="/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/based_on_aruco_test" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/include" />
+            <Add directory="/usr/include/c++/4.9" />
+            <Add directory="/usr/include/c++/4.9/backward" />
+            <Add directory="/usr/include/i386-linux-gnu" />
+            <Add directory="/usr/include/i386-linux-gnu/c++/4.9" />
+            <Add directory="/usr/lib/gcc/i686-linux-gnu/4.9/include" />
+            <Add directory="/usr/lib/gcc/i686-linux-gnu/4.9/include-fixed" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/Makefile&quot;  VERBOSE=1 based_on_aruco_test" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="based_on_aruco_test/fast">
+         <Option output="/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/based_on_aruco_test" prefix_auto="0" extension_auto="0" />
+         <Option working_dir="/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default" />
+         <Option object_output="./" />
+         <Option type="1" />
+         <Option compiler="gcc" />
+         <Compiler>
+            <Add directory="/usr/include" />
+            <Add directory="/usr/include/c++/4.9" />
+            <Add directory="/usr/include/c++/4.9/backward" />
+            <Add directory="/usr/include/i386-linux-gnu" />
+            <Add directory="/usr/include/i386-linux-gnu/c++/4.9" />
+            <Add directory="/usr/lib/gcc/i686-linux-gnu/4.9/include" />
+            <Add directory="/usr/lib/gcc/i686-linux-gnu/4.9/include-fixed" />
+            <Add directory="/usr/local/include" />
+         </Compiler>
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/Makefile&quot;  VERBOSE=1 based_on_aruco_test/fast" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="rebuild_cache">
+         <Option working_dir="/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/Makefile&quot;  VERBOSE=1 rebuild_cache" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      </Build>
+      <Unit filename="/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/based_on_aruco_test.cpp">
+      </Unit>
+      <Unit filename="/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/CMakeLists.txt">
+          <Option virtualFolder="CMake Files\" />
+      </Unit>
+      <Unit filename="/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/../../../../../../../usr/local/lib/cmake/Findaruco.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\..\..\..\usr\local\lib\cmake\" />
+      </Unit>
+   </Project>
+</CodeBlocks_project_file>

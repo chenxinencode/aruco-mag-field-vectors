@@ -42,7 +42,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/build
+CMAKE_BINARY_DIR = /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -69,9 +69,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/build/CMakeFiles /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/build/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/CMakeFiles /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

@@ -1,0 +1,10 @@
+%YAML:1.0
+   TheInputVideo:"live"
+   TheBoardConfigFile:"/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/input_data_files/probe12/probe12config.yml"
+   TheBoardConfigFile2:"/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/input_data_files/probe12/probe12config.yml"
+   TheBoardConfigFileLab:"/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/input_data_files/lab34_board_files/lab34config.yml"
+   TheIntrinsicFile:"/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/input_data_files/intrinsics.yml"
+   recording:0
+   TheMarkerSize1:0.069
+   TheMarkerSizeLab:0.059
+    

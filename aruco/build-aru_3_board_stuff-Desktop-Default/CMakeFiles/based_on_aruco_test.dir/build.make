@@ -38,7 +38,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/build
+CMAKE_BINARY_DIR = /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default
 
 # Include any dependencies generated for this target.
 include CMakeFiles/based_on_aruco_test.dir/depend.make
@@ -50,8 +50,8 @@ include CMakeFiles/based_on_aruco_test.dir/progress.make
 include CMakeFiles/based_on_aruco_test.dir/flags.make
 
 CMakeFiles/based_on_aruco_test.dir/based_on_aruco_test.cpp.o: CMakeFiles/based_on_aruco_test.dir/flags.make
-CMakeFiles/based_on_aruco_test.dir/based_on_aruco_test.cpp.o: ../based_on_aruco_test.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/build/CMakeFiles $(CMAKE_PROGRESS_1)
+CMakeFiles/based_on_aruco_test.dir/based_on_aruco_test.cpp.o: /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/based_on_aruco_test.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/based_on_aruco_test.dir/based_on_aruco_test.cpp.o"
 	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/based_on_aruco_test.dir/based_on_aruco_test.cpp.o -c /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/based_on_aruco_test.cpp
 
@@ -97,6 +97,6 @@ CMakeFiles/based_on_aruco_test.dir/clean:
 .PHONY : CMakeFiles/based_on_aruco_test.dir/clean
 
 CMakeFiles/based_on_aruco_test.dir/depend:
-	cd /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/build /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/build /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/build/CMakeFiles/based_on_aruco_test.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/build-aru_3_board_stuff-Desktop-Default/CMakeFiles/based_on_aruco_test.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/based_on_aruco_test.dir/depend
 
