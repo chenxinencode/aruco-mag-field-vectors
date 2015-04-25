@@ -12,6 +12,7 @@ cp ~/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/input_data_files/aru_testdata/
 
 cp ~/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/input_data_files/22boardfiles/* ./td/
 cp ~/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/input_data_files/lab34_board_files/* ./td/
+cp ~/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/input_data_files/probe12/* ./td/
 
 
 

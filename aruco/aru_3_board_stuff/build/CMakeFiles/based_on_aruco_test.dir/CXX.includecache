@@ -6,9 +6,9 @@
 
 #IncludeRegexTransform: 
 
-/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/./cArduinoSOURCE/cArduino.cpp
+/home/ausername/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/./cArduinoSOURCE/cArduino.cpp
 cArduino.h
-/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/./cArduinoSOURCE/cArduino.h
+/home/ausername/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/./cArduinoSOURCE/cArduino.h
 sys/types.h
 -
 sys/stat.h
@@ -42,13 +42,13 @@ stdlib.h
 sys/time.h
 -
 
-/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/./cArduinoSOURCE/cArduino.h
+/home/ausername/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/./cArduinoSOURCE/cArduino.h
 termios.h
 -
 string
 -
 
-/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/based_on_aruco_test.cpp
+/home/ausername/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/based_on_aruco_test.cpp
 iostream
 -
 fstream
@@ -62,7 +62,7 @@ aruco/aruco.h
 aruco/cvdrawingutils.h
 -
 ./cArduinoSOURCE/cArduino.cpp
-/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/./cArduinoSOURCE/cArduino.cpp
+/home/ausername/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/./cArduinoSOURCE/cArduino.cpp
 thread
 -
 chrono

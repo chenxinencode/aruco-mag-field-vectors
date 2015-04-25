@@ -171,11 +171,11 @@ void drawVecAtPos(cv::Mat &Image,Board &B,const CameraParameters &CP, cv::Mat &l
 }
 
 void drawVecsAtPosTesting(cv::Mat &Image,Board &B,const CameraParameters &CP,
-	cv::Mat &locationData, Mat &R33forLab, Mat &R33forSensorSideNumber1, Board &BProbe);
+	cv::Mat &locationData, Mat &R33forLab, Mat &R33forSensorSideNumber1, Board &BProbe)
 {
-Mat translationStuff = R33forLab.inv()*(TheBoardDetector.getDetectedBoard().Tvec - TheBoardDetectorLab.getDetectedBoard().Tvec);
+Mat SensorTvec = R33forLab.inv()*(BProbe.Tvec - B.Tvec);
 
-Mat SensorTvec = TheBoardDetectorLab.getDetectedBoard().Tvec; //MORNING!// this needs to come from a hand-held "sensor" (Probably a BIG 2 by 2 board.)
+//Mat SensorTvec = TheBoardDetectorLab.getDetectedBoard().Tvec; //MORNING!// this needs to come from a hand-held "sensor" (Probably a BIG 2 by 2 board.)
 	
 	//cerr << SensorTvec <<endl;
 	//cerr << SensorTvec.at<float>(0,2) <<endl;
@@ -228,18 +228,20 @@ Mat SensorTvec = TheBoardDetectorLab.getDetectedBoard().Tvec; //MORNING!// this 
 					(vecy - seny)*(vecy - seny) +
 					(vecz - senz)*(vecz - senz) 
 					)
-					< 0.05){
-			arrowedLine(Image,imagePoints[0],imagePoints[1],Scalar(255,255,255,255),1,//abs(aThing), //normally 1 for thickness
+					< 0.10){
+			arrowedLine(Image,imagePoints[0],imagePoints[1],Scalar(0,0,255,255),1,//abs(aThing), //normally 1 for thickness
 				CV_AA);
 			}
 			else
 			{
-				arrowedLine(Image,imagePoints[0],imagePoints[1],Scalar(0,0,0,255),1,//abs(aThing), //normally 1 for thickness
+				arrowedLine(Image,imagePoints[0],imagePoints[1],Scalar(255,0,0,255),1,//abs(aThing), //normally 1 for thickness
 				CV_AA);
 			}
 			
 			//MORNING//
-			fillConvexPoly(Image,,4,Scalar(255,255,255,255)
+			//BProbe.Tvec 
+			
+			//fillConvexPoly(Image,,4,Scalar(255,255,255,255)
 		
 		
 		
@@ -346,7 +348,7 @@ int main(int argc,char **argv)
 		
 		//cout << "Print the contents of oneVect:" << endl;
 		//cout << oneVect << endl;
-		cout << someVects<<endl;
+		//cout << someVects<<endl;
 		
 		
 		
@@ -477,7 +479,7 @@ int main(int argc,char **argv)
                 if ( probDetect>0.2)   {
 					cerr << "Board 1 in sight!" <<endl;
 					//Mat oneVect = (Mat_<float>(6,1) << atof(argv[6]), atof(argv[7]), atof(argv[8]), atof(argv[9]), atof(argv[10]), atof(argv[11]) ); // Column vector
-                    CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
+                    //CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
                     //drawVecAtPos(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters,oneVect,"awesome");
                     //draw3dAxisBoardj(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
                     //draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
@@ -558,8 +560,6 @@ int main(int argc,char **argv)
 						
 						
 					}
-					//tempardfix//
-					inFromArduino = "512,600,512\n";
 					
 					
 					
@@ -569,7 +569,6 @@ int main(int argc,char **argv)
 					Mat processedInFromArduino = (Mat_<float>(3,1) << 1024, 1024, 1024); // Column vector
 					
 					
-					//tempardfix//
 					
 					
 					
@@ -632,9 +631,9 @@ int main(int argc,char **argv)
 						//cout<<"THIS"<<endl<<processedInFromArduino<<endl<<endl;
 					
 						Mat deriv = processedInFromArduinoLastTime - processedInFromArduino;
-						if (fabs(deriv.at<float>(0,0)) < 3.0 && // if deriv is small
-						     fabs(deriv.at<float>(1,0)) < 3.0 &&
-						       fabs(deriv.at<float>(2,0)) < 3.0)
+						if (fabs(deriv.at<float>(0,0)) < 0.05 && // if deriv is small
+						     fabs(deriv.at<float>(1,0)) < 0.05 &&
+						       fabs(deriv.at<float>(2,0)) < 0.05)
 						       {
 						
 					
