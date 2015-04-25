@@ -4,4 +4,8 @@
 CMakeFiles/based_on_aruco_test.dir/based_on_aruco_test.cpp.o: /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/./cArduinoSOURCE/cArduino.cpp
 CMakeFiles/based_on_aruco_test.dir/based_on_aruco_test.cpp.o: /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/./cArduinoSOURCE/cArduino.h
 CMakeFiles/based_on_aruco_test.dir/based_on_aruco_test.cpp.o: /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/based_on_aruco_test.cpp
+CMakeFiles/based_on_aruco_test.dir/based_on_aruco_test.cpp.o: /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/doTheMainLoopStuff.cpp
+CMakeFiles/based_on_aruco_test.dir/based_on_aruco_test.cpp.o: /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/joljdrawingfuncs.cpp
+CMakeFiles/based_on_aruco_test.dir/based_on_aruco_test.cpp.o: /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/readArguments.cpp
+CMakeFiles/based_on_aruco_test.dir/based_on_aruco_test.cpp.o: /home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/aruco/aru_3_board_stuff/testfile1.cpp
 
