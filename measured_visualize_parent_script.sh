@@ -5,7 +5,7 @@ patt=~/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/
 #run python to do convert from scatter
 python $patt/python_files/csv_to_YAML_newer_than_octave.py
 
-# run octave to mesh files together based on times of reading, then write yaml
+# run octave. This just writes yaml
 octave $patt/matlab_files/just_run_quiver3AR_wrapper.m
 
 # run aruco to show vectors

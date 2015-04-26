@@ -19,15 +19,18 @@ Bz = (0.0039*Bz)-0.0096;
 #resulting units are millitesla	
 
 #scale it a bit more ... log style
-Bx = Bx*5.0 # log(Bx)
-By = By*5.0 # log(By)
-Bz = Bz*5.0 # log(Bz)
+Bx = Bx*20.0 # log(Bx)
+By = By*20.0 # log(By)
+Bz = Bz*20.0 # log(Bz)
 
 #remember that final result for Bx By Bz will be meters (length on screen)
 
+
+
+
+
 # BEGIN INTERPOLATION STUFF.
-# grid_x, grid_y, grid_z
-grid_x, grid_y, grid_z = np.mgrid[min(x):max(x):3j,   min(y):max(y):3j,   min(z):max(z):3j]
+grid_x, grid_y, grid_z = np.mgrid[min(x):max(x):6j,   min(y):max(y):6j,   min(z):max(z):6j]
 
 points = zip(x,y,z) # np.random.rand(len(Bx), 3) 
 
@@ -58,11 +61,15 @@ grid_Bz_0 = griddata(points, Bz, (grid_x, grid_y, grid_z), method='linear')
 #plt.gcf().set_size_inches(6, 6)
 #plt.show()
 
+xi=grid_x.flatten()
+yi=grid_y.flatten()
+zi=grid_z.flatten()
+Bxi=grid_Bx_0.flatten()
+Byi=grid_By_0.flatten()
+Bzi=grid_Bz_0.flatten()
+
+filepathThing = '/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/intermediate_data_files/pos_data_done_with_python_to_do_octave.csv'
+np.savetxt(filepathThing, zip(xi,yi,zi,Bxi,Byi,Bzi),delimiter=",")
 
 
-
-
-np.savetxt('/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/intermediate_data_files/pos_data_done_with_python_to_do_octave.csv', zip(xi,yi,zi,Bxi,Byi,Bzi),delimiter=",")
-
-# with open('/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/intermediate_data_files/pos_data_done_with_python_to_do_octave.csv','r') as outfi:
 	
