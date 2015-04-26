@@ -4,11 +4,12 @@
 
 [x,y,z]=meshgrid(1:4,12:15,22:25);
 
+%rand(4,3,5)
 
 xint = 3.5;
-yint = 13.5;
+xint = 13.5;
 zint = 23.5;
 
-v=2*x;
+v=x.^2;
 
-griddata3(x,y,z,v,xint,yint,zint)
+griddata3(x,y,z,v,xint,yint,zint,"nearest")

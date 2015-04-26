@@ -14,6 +14,8 @@ bool readArguments ( int argc,char **argv )
 
         string inputparamFileName = argv[2];
 
+        recording = argv[3];
+
         FileStorage fsinputparams( inputparamFileName, FileStorage::READ);
 
         fsinputparams["TheInputVideo"] >> TheInputVideo;
@@ -30,7 +32,7 @@ bool readArguments ( int argc,char **argv )
         fsinputparams["TheIntrinsicFile"] >> TheIntrinsicFile;
         TheIntrinsicFile = homeFolder + TheIntrinsicFile;
 
-        fsinputparams["recording"] >> recording;
+        //fsinputparams["recording"] >> recording;
 
         fsinputparams["TheMarkerSize1"] >> TheMarkerSize1;
 
