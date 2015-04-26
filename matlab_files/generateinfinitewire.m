@@ -3,7 +3,7 @@ xran = rangee;
 yran = rangee(rangee>0);
 zran = rangee;
 
-[x, y, z] = meshgrid(xran, yran, zran); %(-1:1, -1:1, -1:1); (-.21:.1:.2, -.21:.1:.2, -.21:.1:.2);
+[x, y, z] = meshgrid(xran, yran, zran);
 
 
 
