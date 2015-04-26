@@ -1,7 +1,12 @@
+
+
 interpolateMode = True
+
+from sys import argv
+
 import numpy as np
 
-with open('/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/intermediate_data_files/pos_data_from_aruco.csv','r') as infi:
+with open(argv[1]+'/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/intermediate_data_files/pos_data_from_aruco.csv','r') as infi:
    x,y,z,Bx,By,Bz = np.loadtxt(infi,delimiter=',',unpack=True)
 
 scaleFactorForVectorsFromCPP = 0.001;
@@ -28,7 +33,7 @@ Bz = Bz*newScaleVecs # log(Bz)
 #remember that final result for Bx By Bz will be meters (length on screen)
 
 if interpolateMode == False:
-	filepathThing = '/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/intermediate_data_files/pos_data_done_with_python_to_do_octave.csv'
+	filepathThing = argv[1]+'/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/intermediate_data_files/pos_data_done_with_python_to_do_octave.csv'
 	np.savetxt(filepathThing, zip(x,y,z,Bx,By,Bz),delimiter=",")
 
 else:
@@ -85,7 +90,7 @@ else:
 	print 'length is', len(xi)
 	
 
-	filepathThing = '/home/elabbiglubu/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/intermediate_data_files/pos_data_done_with_python_to_do_octave.csv'
+	filepathThing = argv[1]+'/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/intermediate_data_files/pos_data_done_with_python_to_do_octave.csv'
 	np.savetxt(filepathThing, zip(xi,yi,zi,Bxi,Byi,Bzi),delimiter=",")
 
 

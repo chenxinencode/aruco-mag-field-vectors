@@ -7,8 +7,8 @@ zran = rangee;
 
 
 
-Bx = -z./((x.^2+z.^2).^(3/2));
-Bz = x./((x.^2+z.^2).^(3/2));
+Bx = z./((x.^2+z.^2).^(3/2));
+Bz = -x./((x.^2+z.^2).^(3/2));
 By = 0.*x;
 
 %Bx = Bx./10000;
@@ -23,7 +23,7 @@ By = 0.*x;
 
 
 % log scaling
-logScaleFlag = true
+logScaleFlag = false
 if logScaleFlag
 
 	Bx(Bx>1) = log(Bx(Bx>1));

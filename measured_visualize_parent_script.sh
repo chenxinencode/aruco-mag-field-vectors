@@ -3,7 +3,8 @@
 patt=~/Desktop/GIT_USE_THIS/aruco-mag-field-vectors/
 
 #run python to do convert from scatter
-python $patt/python_files/csv_to_YAML_newer_than_octave.py
+python $patt/python_files/csv_to_YAML_newer_than_octave.py ~
+#pass in ~ as argument
 
 # run octave. This just writes yaml
 octave $patt/matlab_files/just_run_quiver3AR_wrapper.m
