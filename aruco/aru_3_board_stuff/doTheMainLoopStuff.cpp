@@ -21,16 +21,16 @@ if (TheCameraParameters.isValid()) {
 
     if ( probDetect>0.2)   {
         cerr << "Board 1 in sight!" <<endl;
+        cerr << "YOU PIECE OF ****!" <<endl;
         //Mat oneVect = (Mat_<float>(6,1) << atof(argv[6]), atof(argv[7]), atof(argv[8]), atof(argv[9]), atof(argv[10]), atof(argv[11]) ); // Column vector
         //CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
         //drawVecAtPos(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters,oneVect,"awesome");
         //draw3dAxisBoardj(TheInputImageCopy,TheBoardDetector.getDetectedBoard(),TheCameraParameters);
         //draw3dBoardCube( TheInputImageCopy,TheBoardDetected,TheIntriscCameraMatrix,TheDistorsionCameraParams);
     }
-    else
-
-
-    {if (recording == true) {cerr << "Can't see board 1.\n";}}
+    else {
+		if (recording == true) {cerr << "Can't see board 1.\n";}
+	}
 
 
 
@@ -51,7 +51,10 @@ if (TheCameraParameters.isValid()) {
         CvDrawingUtils::draw3dAxis( TheInputImageCopy,TheBoardDetectorLab.getDetectedBoard(),TheCameraParameters);
     }
     else
-    {cerr << "Can't see board Lab.\n";}
+		{
+			cerr << "Can't see board Lab." << endl;
+			cerr << "recording?" <<recording<<endl;
+			}
 
 
 
@@ -76,7 +79,7 @@ if (TheCameraParameters.isValid()) {
 
 
 
-
+	
 
 
     if ( probDetectLab>0.2  && probDetect>0.2
@@ -172,6 +175,15 @@ if (TheCameraParameters.isValid()) {
             //cout<<"minus qui"<<endl<<processedInFromArduino<<endl<<endl;
             processedInFromArduino = scaleFactorForVectors*processedInFromArduino;
             //cout<<"THIS"<<endl<<processedInFromArduino<<endl<<endl;
+
+            //x is good //processedInFromArduino.at<float>(0,0)
+            cerr << processedInFromArduino.at<float>(1,0) <<endl;
+            cerr << processedInFromArduino.at<float>(2,0) <<endl;
+            processedInFromArduino.at<float>(1,0) = -processedInFromArduino.at<float>(1,0);
+            processedInFromArduino.at<float>(2,0) = -processedInFromArduino.at<float>(2,0);
+            cerr << processedInFromArduino.at<float>(1,0) <<endl;
+            cerr << processedInFromArduino.at<float>(2,0) <<endl;
+
 
             Mat deriv = processedInFromArduinoLastTime - processedInFromArduino;
             if (fabs(deriv.at<float>(0,0)) < 0.05 && // if deriv is small

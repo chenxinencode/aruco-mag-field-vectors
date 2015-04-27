@@ -6,5 +6,5 @@ cd build
 cmake ..
 make
 
-
-./file_copy_stuff.sh
+# cd ..
+# ./file_copy_stuff.sh
